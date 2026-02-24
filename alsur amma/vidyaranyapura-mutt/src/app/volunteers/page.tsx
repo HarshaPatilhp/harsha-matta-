@@ -1,12 +1,16 @@
+'use client';
+
 import VolunteerCard from '@/components/VolunteerCard';
+import { useRouter } from 'next/navigation';
 
 export default function Volunteers() {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-orange-600 to-orange-800 text-white py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">Volunteers</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">Sarvotham Swayamsevakar Sangha</h1>
           <p className="text-xl text-center max-w-3xl mx-auto">
             Dedicated devotees serving the temple and community
           </p>
@@ -46,7 +50,7 @@ export default function Volunteers() {
             </div>
           </div>
 
-          {/* Volunteer Roles Section */}
+          {/* Volunteer Roles Section
           <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
             <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               Volunteer Roles and Responsibilities
@@ -121,7 +125,7 @@ export default function Volunteers() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Benefits Section */}
           <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
@@ -182,6 +186,9 @@ export default function Volunteers() {
                 description="Managing daily operations and coordinating volunteer activities"
                 imageSrc="/images/2.jpg"
                 alt="Gururaj Patil"
+                phone="+91 98765 43210"
+                instagram="https://instagram.com/gururajpatil"
+                linkedin="https://linkedin.com/in/gururajpatil"
               />
 
               {/* Volunteer Card 2 */}
@@ -191,24 +198,33 @@ export default function Volunteers() {
                 description="Organizing festivals and special events at the temple"
                 imageSrc="/images/4.JPEG"
                 alt="Vivek"
+                phone="+91 98765 43211"
+                instagram="https://instagram.com/vivek"
+                linkedin="https://linkedin.com/in/vivek"
               />
 
               {/* Volunteer Card 3 */}
               <VolunteerCard
                 name="Harsha Patil"
-                role="Pooja Assistant"
-                description="Assisting priests during daily and special poojas"
+                role="Pooja Coordinator"
+                description="Managing daily pooja schedules and rituals"
                 imageSrc="/images/1..jpg"
                 alt="Harsha Patil"
+                phone="+91 9738624467"
+                instagram="https://www.instagram.com/harsha._._.patil/"
+                linkedin="https://www.linkedin.com/in/harsha-patil-28059327b/l"
               />
 
               {/* Volunteer Card 4 */}
               <VolunteerCard
-                name="Sunita Reddy"
-                role="Kitchen Coordinator"
-                description="Managing prasadam preparation and distribution"
-                imageSrc="/images/1..jpg"
-                alt="Sunita Reddy"
+                name="Ramesh Kumar"
+                role="Security Coordinator"
+                description="Ensuring safety and managing crowds during events"
+                imageSrc="/images/ramesh-kumar.jpg"
+                alt="Ramesh Kumar"
+                phone="+91 98765 43213"
+                instagram="https://instagram.com/rameshkumar"
+                linkedin="https://linkedin.com/in/rameshkumar"
               />
 
               {/* Volunteer Card 5 */}
@@ -218,6 +234,9 @@ export default function Volunteers() {
                 description="Ensuring safety and managing crowds during events"
                 imageSrc="/images/karthik-nair.jpg"
                 alt="Karthik Nair"
+                phone="+91 98765 43214"
+                instagram="https://instagram.com/karthiknair"
+                linkedin="https://linkedin.com/in/karthiknair"
               />
 
               {/* Volunteer Card 6 */}
@@ -227,6 +246,9 @@ export default function Volunteers() {
                 description="Managing office work and communication"
                 imageSrc="/images/deepa-joshi.jpg"
                 alt="Deepa Joshi"
+                phone="+91 98765 43215"
+                instagram="https://instagram.com/deepajoshi"
+                linkedin="https://linkedin.com/in/deepajoshi"
               />
             </div>
           </div>
@@ -240,10 +262,16 @@ export default function Volunteers() {
               contribution to preserving our spiritual heritage.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button className="bg-white text-orange-600 px-6 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors">
+              <button 
+                onClick={() => router.push('/contact')}
+                className="bg-white text-orange-600 px-6 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors"
+              >
                 Contact Us
               </button>
-              <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-orange-600 transition-colors">
+              <button 
+                onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSegCTIjhyqVdIMGMKUd7obrCTBeomk5KbjkzbQl-ZgdeHICMg/viewform?usp=publish-editor', '_blank')}
+                className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-orange-600 transition-colors"
+              >
                 Apply Now
               </button>
             </div>
