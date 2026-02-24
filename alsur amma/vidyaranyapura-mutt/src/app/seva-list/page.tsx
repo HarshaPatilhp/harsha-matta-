@@ -436,82 +436,62 @@ export default function SevaList() {
     setShowHallBookingForm(true);
   };
 
-  const handleBookingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleBookingSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    try {
-      const formData = new FormData(e.currentTarget);
+    // Add hidden fields for Formspree
+    const form = e.target as HTMLFormElement;
+    const hiddenField = document.createElement('input');
+    hiddenField.type = 'hidden';
+    hiddenField.name = 'subject';
+    hiddenField.value = `Seva Booking: ${selectedSeva?.name}`;
+    form.appendChild(hiddenField);
 
-      const bookingData = {
-        id: Date.now(),
-        sevaName: selectedSeva?.name,
-        devoteeName: formData.get('fullName') as string,
-        email: formData.get('email') as string,
-        phone: formData.get('phone') as string,
-        date: formData.get('date') as string,
-        time: selectedSeva?.time,
-        numberOfPeople: formData.get('numberOfPeople') as string,
-        gotra: formData.get('gotra') as string,
-        nakshatra: formData.get('nakshatra') as string,
-        hall: formData.get('hall') as string,
-        lunchRequired: lunchRequired,
-        lunchHall: lunchRequired ? (formData.get('lunchHall') as string) : '',
-        specialRequests: formData.get('specialRequests') as string,
-        status: 'pending' as const,
-        qrCode: `QR${Date.now()}`,
-        createdAt: new Date().toISOString()
-      };
+    const typeField = document.createElement('input');
+    typeField.type = 'hidden';
+    typeField.name = 'type';
+    typeField.value = 'seva_booking';
+    form.appendChild(typeField);
 
-      // Save to localStorage
-      const existingBookings = JSON.parse(localStorage.getItem('temple_bookings') || '[]');
-      existingBookings.push(bookingData);
-      localStorage.setItem('temple_bookings', JSON.stringify(existingBookings));
-
-      // Save to Google Sheets
-      try {
-        const sheetsResponse = await fetch('/api/bookings', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(bookingData),
-        });
-
-        if (!sheetsResponse.ok) {
-          console.error('Failed to save to Google Sheets');
-        }
-      } catch (error) {
-        console.error('Error saving to Google Sheets:', error);
-      }
-
-      // Send email with QR code
-      try {
-        const emailResponse = await fetch('/api/send-email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ booking: bookingData, qrCode: bookingData.qrCode }),
-        });
-
-        if (emailResponse.ok) {
-          alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Confirmation email sent successfully.`);
-        } else {
-          alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Email sending failed, but booking is saved.`);
-        }
-      } catch (error) {
-        console.error('Error sending email:', error);
-        alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Email sending failed, but booking is saved.`);
-      }
-    } catch (error) {
-      console.error('Error in booking submission:', error);
-      alert('An error occurred while submitting your booking. Please try again.');
-    } finally {
-      setIsSubmitting(false);
+    // Formspree will handle the submission
+    form.submit();
+    
+    // Reset form after submission
+    setTimeout(() => {
       setShowBookingForm(false);
       setSelectedSeva(null);
-    }
+      setIsSubmitting(false);
+    }, 1000);
+  };
+
+  const handleHallBookingSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Add hidden fields for Formspree
+    const form = e.target as HTMLFormElement;
+    const hiddenField = document.createElement('input');
+    hiddenField.type = 'hidden';
+    hiddenField.name = 'subject';
+    hiddenField.value = `Hall Booking: ${selectedHall?.name}`;
+    form.appendChild(hiddenField);
+
+    const typeField = document.createElement('input');
+    typeField.type = 'hidden';
+    typeField.name = 'type';
+    typeField.value = 'hall_booking';
+    form.appendChild(typeField);
+
+    // Formspree will handle the submission
+    form.submit();
+    
+    // Reset form after submission
+    setTimeout(() => {
+      setShowHallBookingForm(false);
+      setSelectedHall(null);
+      setIsSubmitting(false);
+    }, 1000);
   };
 
   return (
@@ -830,7 +810,12 @@ export default function SevaList() {
                 </button>
               </div>
 
-              <form onSubmit={handleBookingSubmit} className="space-y-4">
+              <form 
+                action="https://formspree.io/f/mgolrklv" 
+                method="POST"
+                onSubmit={handleHallBookingSubmit} 
+                className="space-y-4"
+              >
                 <div>
                   <label className="block text-sm font-medium text-black mb-1">Full Name</label>
                   <input

@@ -7,6 +7,15 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   reactCompiler: true,
+  compress: true,
+  poweredByHeader: false,
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['lucide-react', '@heroicons/react'],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
 };
 
 export default nextConfig;
