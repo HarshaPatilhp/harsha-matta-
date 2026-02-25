@@ -2,9 +2,6 @@
   command = "npm run build"
   publish = "out"
 
-[build.environment]
-  NODE_VERSION = "18"
-
 # Handle all routes to index.html for SPA behavior
 [[redirects]]
   from = "/*"
