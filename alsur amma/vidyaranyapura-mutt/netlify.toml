@@ -18,13 +18,7 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
-# Handle root redirect
-[[redirects]]
-  from = "/index.html"
-  to = "/"
-  status = 200
-
-# Handle all other routes to index.html for SPA behavior
+# Handle all routes to index.html for SPA behavior
 [[redirects]]
   from = "/*"
   to = "/index.html"
