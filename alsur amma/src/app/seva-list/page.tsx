@@ -59,6 +59,7 @@ export default function SevaList() {
         const formData = new FormData();
         formData.append("file", qrDataUrl);
         formData.append("upload_preset", "unsigned_preset");
+        formData.append("folder", "qrcodes"); // optional but clean
         formData.append("public_id", `qr_${bookingId}`); // unique QR
 
         // 3️⃣ Upload to Cloudinary
@@ -73,11 +74,10 @@ export default function SevaList() {
         const data = await response.json();
         console.log('Cloudinary response:', data);
         
-        if (data.error) {
-          console.error('Cloudinary error:', data.error);
-          throw new Error(`Cloudinary upload failed: ${data.error.message}`);
+        if (!data.secure_url) {
+          throw new Error("QR upload failed");
         }
-
+        
         return data.secure_url; // ✅ THIS IS THE QR IMAGE URL
       };
 
