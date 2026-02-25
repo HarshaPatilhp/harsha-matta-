@@ -11,6 +11,37 @@
   to = "/"
   status = 200
 
+[[redirects]]
+  from = "/_next/static/*"
+  to = "/_next/static/"
+  status = 200
+
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 200
+
+# Handle specific page routes
+[[redirects]]
+  from = "/seva-list.html"
+  to = "/seva-list"
+  status = 200
+
+[[redirects]]
+  from = "/dashboard.html"
+  to = "/dashboard"
+  status = 200
+
+[[redirects]]
+  from = "/login.html"
+  to = "/login"
+  status = 200
+
+[[redirects]]
+  from = "/contact.html"
+  to = "/contact"
+  status = 200
+
 # Handle 404s for Next.js static export
 [[redirects]]
   from = "/*"
