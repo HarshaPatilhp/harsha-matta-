@@ -3,6 +3,7 @@
 import emailjs from '@emailjs/browser';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import QRCode from 'qrcode';
 
 interface Seva {
   id: number;
@@ -46,16 +47,42 @@ export default function SevaList() {
 
   const sendBookingEmail = async (bookingData: any) => {
     try {
+      // Upload QR to Cloudinary
+      const uploadQR = async (qrBase64: string) => {
+        const formData = new FormData();
+        formData.append("file", qrBase64);
+        formData.append("upload_preset", "unsigned_preset"); // Create this in Cloudinary
+
+        const res = await fetch(
+          "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload",
+          { method: "POST", body: formData }
+        );
+
+        const data = await res.json();
+        return data.secure_url; // ✅ image URL
+      };
+
+      // Generate QR code with booking ID
+      const qrDataUrl = await QRCode.toDataURL(bookingData.id.toString(), {
+        width: 180,
+        margin: 1,
+        errorCorrectionLevel: "L",
+      });
+
+      // Upload QR to Cloudinary
+      const qrImageUrl = await uploadQR(qrDataUrl);
+
       const templateParams = {
         to_email: bookingData.email,
         devotee_name: bookingData.devoteeName,
         seva_name: bookingData.sevaName,
         booking_id: bookingData.id,
+        qr_id: bookingData.id, // Text fallback
+        qr_code: qrImageUrl, // Image URL
         date: bookingData.date,
         time: bookingData.time,
         number_of_people: bookingData.numberOfPeople,
         cost: bookingData.sevaCost,
-        qr_code: bookingData.qrCode,
       };
 
       await emailjs.send(
@@ -483,9 +510,12 @@ export default function SevaList() {
 
     try {
       const formData = new FormData(e.currentTarget);
+      
+      // Generate booking ID first
+      const bookingId = Date.now();
 
       const bookingData = {
-        id: Date.now(),
+        id: bookingId,
         sevaName: selectedSeva?.name,
         devoteeName: formData.get('fullName') as string,
         email: formData.get('email') as string,
@@ -511,7 +541,7 @@ export default function SevaList() {
           const tirthaCostNum = (parseInt(formData.get('tirthaPrasadaCount') as string) || 0) * 250;
           return sevaCostNum + tirthaCostNum;
         })(),
-        qrCode: `QR${Date.now()}`,
+        qrCode: bookingId.toString(), // Use booking ID as QR data
         createdAt: new Date().toISOString()
       };
 
