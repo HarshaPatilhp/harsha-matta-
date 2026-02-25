@@ -487,7 +487,7 @@ export default function SevaList() {
 
       // Send email with QR code
       try {
-        const emailResponse = await fetch('/api/send-email', {
+        const emailResponse = await fetch('/.netlify/functions/send-email', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

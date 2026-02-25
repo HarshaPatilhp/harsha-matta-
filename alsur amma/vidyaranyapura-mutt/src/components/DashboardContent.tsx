@@ -294,7 +294,7 @@ export default function DashboardContent() {
 
   const sendCompletionEmail = async (bookingData: any) => {
     try {
-      const response = await fetch('/api/send-completion-email', {
+      const response = await fetch('/.netlify/functions/send-completion-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
