@@ -48,45 +48,41 @@ export default function SevaList() {
   const sendBookingEmail = async (bookingData: any) => {
     try {
       // Upload QR to Cloudinary
-      const uploadQR = async (qrBase64: string) => {
-        console.log('Starting QR upload...');
+      const uploadQrToCloudinary = async (bookingId: number) => {
+        // 1️⃣ Generate QR as base64
+        const qrDataUrl = await QRCode.toDataURL(bookingId.toString(), {
+          width: 300,
+          margin: 2,
+        });
+
+        // 2️⃣ Prepare upload
         const formData = new FormData();
-        formData.append("file", qrBase64);
-        formData.append("upload_preset", "unsigned_preset"); // Create this in Cloudinary
+        formData.append("file", qrDataUrl);
+        formData.append("upload_preset", "unsigned_preset");
+        formData.append("public_id", `qr_${bookingId}`); // unique QR
 
-        try {
-          const res = await fetch(
-            "https://api.cloudinary.com/v1_1/dcpb7thpb/image/upload",
-            { method: "POST", body: formData }
-          );
-
-          const data = await res.json();
-          console.log('Cloudinary response:', data);
-          
-          if (data.error) {
-            console.error('Cloudinary error:', data.error);
-            throw new Error(`Cloudinary upload failed: ${data.error.message}`);
+        // 3️⃣ Upload to Cloudinary
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dcpb7thpb/image/upload",
+          {
+            method: "POST",
+            body: formData,
           }
-          
-          return data.secure_url; // ✅ image URL
-        } catch (error) {
-          console.error('Upload error:', error);
-          throw error;
+        );
+
+        const data = await response.json();
+        console.log('Cloudinary response:', data);
+        
+        if (data.error) {
+          console.error('Cloudinary error:', data.error);
+          throw new Error(`Cloudinary upload failed: ${data.error.message}`);
         }
+
+        return data.secure_url; // ✅ THIS IS THE QR IMAGE URL
       };
 
-      // Generate QR code with booking ID
-      console.log('Generating QR code for booking ID:', bookingData.id);
-      const qrDataUrl = await QRCode.toDataURL(bookingData.id.toString(), {
-        width: 200,
-        margin: 1,
-        errorCorrectionLevel: "L",
-      });
-      console.log('QR code generated, length:', qrDataUrl.length);
-
-      // Upload QR to Cloudinary
-      console.log('Uploading QR to Cloudinary...');
-      const qrImageUrl = await uploadQR(qrDataUrl);
+      // Call the Cloudinary upload function
+      const qrImageUrl = await uploadQrToCloudinary(bookingData.id);
       console.log('QR uploaded to Cloudinary:', qrImageUrl);
 
       const templateParams = {
@@ -94,8 +90,8 @@ export default function SevaList() {
         devotee_name: bookingData.devoteeName,
         seva_name: bookingData.sevaName,
         booking_id: bookingData.id,
-        qr_id: bookingData.id, // Text fallback
-        qr_code: qrImageUrl, // Image URL
+        qr_id: bookingData.id,
+        qr_code: qrImageUrl, // Use Cloudinary URL
         date: bookingData.date,
         time: bookingData.time,
         number_of_people: bookingData.numberOfPeople,
