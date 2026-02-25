@@ -68,6 +68,7 @@ export default function SevaList() {
     } catch (error) {
       console.error('EmailJS error:', error);
       console.error('EmailJS error details:', JSON.stringify(error, null, 2));
+      alert(`EmailJS Error: ${JSON.stringify(error, null, 2)}`);
       return false;
     }
   };
