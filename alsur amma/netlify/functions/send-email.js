@@ -35,26 +35,26 @@ exports.handler = async (event, context) => {
 
           <div style="background-color: #fef3c7; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
             <h3 style="color: #92400e; margin-top: 0;">Booking Details:</h3>
-            <p><strong>Booking ID:</strong> ${booking.id}</p>
-            <p><strong>Devotee Name:</strong> ${booking.devoteeName}</p>
-            <p><strong>Email:</strong> ${booking.email}</p>
-            <p><strong>Phone:</strong> ${booking.phone}</p>
-            <p><strong>Seva:</strong> ${booking.sevaName}</p>
-            <p><strong>Date:</strong> ${new Date(booking.date).toLocaleDateString()}</p>
-            <p><strong>Time:</strong> ${booking.time}</p>
-            <p><strong>Number of People:</strong> ${booking.numberOfPeople}</p>
-            <p><strong>Gotra:</strong> ${booking.gotra || 'Not specified'}</p>
-            <p><strong>Nakshatra:</strong> ${booking.nakshatra || 'Not specified'}</p>
-            ${booking.hall ? `<p><strong>Hall:</strong> ${booking.hall}</p>` : ''}
-            <p><strong>Tirtha Prasada Required:</strong> ${booking.tirthaPrasadaRequired ? 'Yes' : 'No'}</p>
-            ${booking.tirthaPrasadaRequired ? `<p><strong>Tirtha Prasada Count:</strong> ${booking.tirthaPrasadaCount}</p>` : ''}
-            ${booking.lunchRequired ? `<p><strong>Lunch Required:</strong> Yes</p>` : ''}
-            ${booking.lunchRequired ? `<p><strong>Lunch Count:</strong> ${booking.lunchCount}</p>` : ''}
-            ${booking.lunchHall ? `<p><strong>Lunch Hall:</strong> ${booking.lunchHall}</p>` : ''}
-            ${booking.sevaCost ? `<p><strong>Seva Cost:</strong> ₹${booking.sevaCost}</p>` : ''}
-            ${booking.lunchCost ? `<p><strong>Tirtha Prasada Cost:</strong> ₹${booking.lunchCost}</p>` : ''}
-            ${booking.totalCost ? `<p><strong>Total Cost:</strong> ₹${booking.totalCost}</p>` : ''}
-            ${booking.specialRequests ? `<p><strong>Special Requests:</strong> ${booking.specialRequests}</p>` : ''}
+            <p><strong>Booking ID:</strong> {{booking_id}}</p>
+<p><strong>Devotee Name:</strong> {{devotee_name}}</p>
+<p><strong>Email:</strong> {{email}}</p>
+<p><strong>Phone:</strong> {{phone}}</p>
+<p><strong>Seva:</strong> {{seva_name}}</p>
+<p><strong>Date:</strong> {{seva_date}}</p>
+<p><strong>Time:</strong> {{seva_time}}</p>
+<p><strong>Number of People:</strong> {{people_count}}</p>
+<p><strong>Gotra:</strong> {{gotra}}</p>
+<p><strong>Nakshatra:</strong> {{nakshatra}}</p>
+<p><strong>Hall:</strong> {{hall}}</p>
+<p><strong>Tirtha Prasada Required:</strong> {{tirtha_prasada}}</p>
+<p><strong>Tirtha Prasada Count:</strong> {{tirtha_prasada_count}}</p>
+<p><strong>Lunch Required:</strong> {{lunch_required}}</p>
+<p><strong>Lunch Count:</strong> {{lunch_count}}</p>
+<p><strong>Lunch Hall:</strong> {{lunch_hall}}</p>
+<p><strong>Seva Cost:</strong> ₹{{seva_cost}}</p>
+<p><strong>Tirtha Prasada Cost:</strong> ₹{{lunch_cost}}</p>
+<p><strong>Total Cost:</strong> ₹{{total_cost}}</p>
+<p><strong>Special Requests:</strong> {{special_requests}}</p>
           </div>
 
           <div style="text-align: center; margin: 30px 0;">
