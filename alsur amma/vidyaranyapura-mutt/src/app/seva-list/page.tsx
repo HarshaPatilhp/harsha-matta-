@@ -32,6 +32,11 @@ export default function SevaList() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState<'seva' | 'hall'>('seva');
 
+  // Initialize EmailJS
+  useState(() => {
+    emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+  });
+
   const sevas: Seva[] = [
     {
       id: 1,
@@ -443,37 +448,52 @@ export default function SevaList() {
     try {
       const formData = new FormData(e.currentTarget);
 
-      // Add hidden fields
-      const hiddenField = document.createElement('input');
-      hiddenField.type = 'hidden';
-      hiddenField.name = 'subject';
-      hiddenField.value = `Seva Booking: ${selectedSeva?.name}`;
-      e.currentTarget.appendChild(hiddenField);
+      const bookingData = {
+        id: Date.now(),
+        sevaName: selectedSeva?.name,
+        devoteeName: formData.get('fullName') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string,
+        date: formData.get('date') as string,
+        time: selectedSeva?.time,
+        numberOfPeople: formData.get('numberOfPeople') as string,
+        gotra: formData.get('gotra') as string,
+        nakshatra: formData.get('nakshatra') as string,
+        hall: formData.get('hall') as string,
+        cost: selectedSeva?.cost,
+        qrCode: `QR${Date.now()}`,
+        createdAt: new Date().toISOString()
+      };
 
-      const typeField = document.createElement('input');
-      typeField.type = 'hidden';
-      typeField.name = 'type';
-      typeField.value = 'seva_booking';
-      e.currentTarget.appendChild(typeField);
+      // Send email with QR code
+      try {
+        const emailResponse = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ booking: bookingData, qrCode: bookingData.qrCode }),
+        });
 
-      // Submit via AJAX to Formspree
-      const response = await fetch('https://formspree.io/f/mgolrklv', {
-        method: 'POST',
-        body: new FormData(e.currentTarget),
-        headers: {
-          'Accept': 'application/json'
+        if (emailResponse.ok) {
+          alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Confirmation email sent successfully.`);
+        } else {
+          alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Email sending failed, but booking is saved.`);
         }
-      });
-
-      if (response.ok) {
-        alert(`Thank you! Your seva booking request for ${selectedSeva?.name} has been submitted successfully. We will contact you soon.`);
-        setShowBookingForm(false);
-        setSelectedSeva(null);
-      } else {
-        alert('There was an error submitting your booking. Please try again.');
+      } catch (error) {
+        console.error('Error sending email:', error);
+        alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Email sending failed, but booking is saved.`);
       }
+
+      // Save to localStorage as backup
+      const existingBookings = JSON.parse(localStorage.getItem('temple_bookings') || '[]');
+      existingBookings.push(bookingData);
+      localStorage.setItem('temple_bookings', JSON.stringify(existingBookings));
+
+      setShowBookingForm(false);
+      setSelectedSeva(null);
     } catch (error) {
-      console.error('Submission error:', error);
+      console.error('Booking submission error:', error);
       alert('There was an error submitting your booking. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -485,38 +505,49 @@ export default function SevaList() {
     setIsSubmitting(true);
 
     try {
-      // Add hidden fields
-      const hiddenField = document.createElement('input');
-      hiddenField.type = 'hidden';
-      hiddenField.name = 'subject';
-      hiddenField.value = `Hall Booking: ${selectedHall?.name}`;
-      e.currentTarget.appendChild(hiddenField);
+      const formData = new FormData(e.currentTarget);
 
-      const typeField = document.createElement('input');
-      typeField.type = 'hidden';
-      typeField.name = 'type';
-      typeField.value = 'hall_booking';
-      e.currentTarget.appendChild(typeField);
+      // Prepare email template parameters for hall booking
+      const templateParams = {
+        to_email: formData.get('email'),
+        devotee_name: formData.get('fullName'),
+        hall_name: selectedHall?.name,
+        event_date: formData.get('date'),
+        event_type: formData.get('eventType'),
+        number_of_people: formData.get('numberOfPeople'),
+        event_description: formData.get('eventDescription'),
+        hall_cost: selectedHall?.cost,
+        hall_capacity: selectedHall?.capacity,
+        booking_id: `HB${Date.now()}`,
+        phone: formData.get('phone')
+      };
 
-      // Submit via AJAX to Formspree
-      const response = await fetch('https://formspree.io/f/mgolrklv', {
-        method: 'POST',
-        body: new FormData(e.currentTarget),
-        headers: {
-          'Accept': 'application/json'
+      // Send confirmation email using EmailJS
+      try {
+        await emailjs.send(
+          'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+          'YOUR_HALL_TEMPLATE_ID', // Replace with your EmailJS hall booking template ID
+
+        if (emailResponse.ok) {
+          alert(`Hall booking submitted for ${selectedHall?.name}! Your booking ID is ${bookingData.id}. Confirmation email sent successfully.`);
+        } else {
+          alert(`Hall booking submitted for ${selectedHall?.name}! Your booking ID is ${bookingData.id}. Email sending failed, but booking is saved.`);
         }
-      });
-
-      if (response.ok) {
-        alert(`Thank you! Your hall booking request for ${selectedHall?.name} has been submitted successfully. We will contact you soon.`);
-        setShowHallBookingForm(false);
-        setSelectedHall(null);
-      } else {
-        alert('There was an error submitting your booking. Please try again.');
+      } catch (error) {
+        console.error('Error sending email:', error);
+        alert(`Hall booking submitted for ${selectedHall?.name}! Your booking ID is ${bookingData.id}. Email sending failed, but booking is saved.`);
       }
+
+      // Save to localStorage as backup
+      const existingBookings = JSON.parse(localStorage.getItem('temple_hall_bookings') || '[]');
+      existingBookings.push(bookingData);
+      localStorage.setItem('temple_hall_bookings', JSON.stringify(existingBookings));
+
+      setShowHallBookingForm(false);
+      setSelectedHall(null);
     } catch (error) {
-      console.error('Submission error:', error);
-      alert('There was an error submitting your booking. Please try again.');
+      console.error('Hall booking submission error:', error);
+      alert('There was an error submitting your hall booking. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -752,8 +783,8 @@ export default function SevaList() {
 
                 <div>
                   <label className="block text-sm font-medium text-black mb-1">Hall Location</label>
-                  <select name="hall" required className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
-                    <option value="">Select hall location</option>
+                  <select name="hall" required className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                    <option value=""disabled>Select hall location</option>
                     <option value="Main Prayer Hall">Main Prayer Hall</option>
                     <option value="Abhisheka Hall">Abhisheka Hall</option>
                     <option value="Homa Hall">Homa Hall</option>
