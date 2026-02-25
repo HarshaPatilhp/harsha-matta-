@@ -59,7 +59,7 @@ export default function DashboardContent() {
 
   useEffect(() => {
     // Initialize EmailJS with your public key
-    emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+    emailjs.init('bfEoBkT_7gXKCRsGg'); // Replace with your EmailJS public key
   }, []);
   const startQRScan = async () => {
     console.log('Starting QR scan...');
@@ -308,8 +308,8 @@ export default function DashboardContent() {
       };
 
       await emailjs.send(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_COMPLETION_TEMPLATE_ID', // Replace with your EmailJS completion template ID
+        'service_7cfhrr5', // Replace with your EmailJS service ID
+        'template_umwnbkd', // Replace with your EmailJS completion template ID
         templateParams
       );
 

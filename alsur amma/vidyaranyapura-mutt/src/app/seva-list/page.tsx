@@ -41,7 +41,7 @@ export default function SevaList() {
 
   useEffect(() => {
     // Initialize EmailJS with your public key
-    emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+    emailjs.init('bfEoBkT_7gXKCRsGg'); // Replace with your EmailJS public key
   }, []);
 
   const sendBookingEmail = async (bookingData: any) => {
@@ -59,8 +59,8 @@ export default function SevaList() {
       };
 
       await emailjs.send(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        'service_7cfhrr5', // Replace with your EmailJS service ID
+        'template_umwnbkd', // Replace with your EmailJS template ID
         templateParams
       );
 
