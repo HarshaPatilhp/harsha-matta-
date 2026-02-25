@@ -57,7 +57,10 @@ export default function DashboardContent() {
 
   const [scanHistory, setScanHistory] = useState<ScanHistory[]>([]);
 
-  // QR Scanner functions
+  useEffect(() => {
+    // Initialize EmailJS with your public key
+    emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+  }, []);
   const startQRScan = async () => {
     console.log('Starting QR scan...');
     setIsScanning(true);
