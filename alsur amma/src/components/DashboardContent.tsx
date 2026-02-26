@@ -150,13 +150,19 @@ export default function DashboardContent() {
 
   const simulateScan = (qrCode: string) => {
     try {
+      console.log('Scanning QR code:', qrCode);
+      console.log('Available bookings:', bookings.map(b => ({ id: b.id, qrCode: b.qrCode })));
+      
       // Parse QR code data (assuming it's JSON format from email QR codes)
       let bookingData;
       try {
         bookingData = JSON.parse(qrCode);
+        console.log('Parsed JSON booking data:', bookingData);
       } catch {
         // If not JSON, treat as booking ID
+        console.log('Not JSON, treating as booking ID');
         const booking = bookings.find(b => b.qrCode === qrCode || b.id.toString() === qrCode);
+        console.log('Found booking by ID/QR:', booking);
         if (booking) {
           bookingData = booking;
         } else {

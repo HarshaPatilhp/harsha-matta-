@@ -104,28 +104,40 @@ export default function Header() {
 
           {/* User Info / Login Button - Extreme right side */}
           <div className="hidden md:flex">
-            {isAuthenticated ? (
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center bg-white text-orange-600 px-4 py-2 rounded-full">
-                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                    <path d="M12 3a4 4 0 100 8 4 4 0 000-8z" />
-                  </svg>
-                  <span className="font-semibold">{user?.name}</span>
-                  {user?.role === 'admin' && (
-                    <span className="ml-2 text-xs bg-orange-600 text-white px-2 py-1 rounded-full">Admin</span>
-                  )}
-                </div>
-                <button
-                  onClick={logout}
-                  className="hover:text-orange-200 transition-colors flex items-center bg-red-600 text-white px-4 py-2 rounded-full"
-                >
-                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                  </svg>
-                  Logout
-                </button>
-              </div>
+  {isAuthenticated ? (
+    <div className="flex items-center gap-4">
+      <div className="flex items-center bg-white text-orange-600 px-3 py-2 rounded-full shrink-0">
+        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <path d="M12 3a4 4 0 100 8 4 4 0 000-8z" />
+        </svg>
+
+        <span className="font-semibold whitespace-nowrap">
+          {user?.name}
+        </span>
+
+        {user?.role === 'admin' && (
+          <span className="ml-2 text-xs bg-orange-600 text-white px-2 py-1 rounded-full whitespace-nowrap">
+            Admin
+          </span>
+        )}
+      </div>
+
+      <button
+        onClick={logout}
+        className="flex items-center bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition-colors shrink-0"
+      >
+        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
+        Logout
+      </button>
+    </div>
             ) : (
               <Link href="/login" className="hover:text-orange-200 transition-colors flex items-center bg-white text-orange-600 px-4 py-2 rounded-full ml-8">
                 <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
