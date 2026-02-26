@@ -82,7 +82,7 @@ export default function DashboardContent() {
       const qrScanner = new QrScanner(
         videoRef.current,
         (result) => {
-          console.log('QR Code detected:', result.data);
+          console.log('QR Code detected by scanner:', result.data);
           setScanResult(result.data);
           simulateScan(result.data);
           stopQRScan();
@@ -97,9 +97,11 @@ export default function DashboardContent() {
         }
       );
 
-      qrScannerRef.current = qrScanner;
+      console.log('QR Scanner created, starting...');
       await qrScanner.start();
-      console.log('QR scanner started successfully');
+      console.log('QR Scanner started successfully');
+
+      qrScannerRef.current = qrScanner;
 
     } catch (error) {
       console.error('Error starting QR scanner:', error);
@@ -153,20 +155,30 @@ export default function DashboardContent() {
       console.log('Scanning QR code:', qrCode);
       console.log('Available bookings:', bookings.map(b => ({ id: b.id, qrCode: b.qrCode })));
       
+      // Trim whitespace from input
+      const trimmedQrCode = qrCode.trim();
+      console.log('Trimmed QR code:', trimmedQrCode);
+      
       // Parse QR code data (assuming it's JSON format from email QR codes)
       let bookingData;
       try {
-        bookingData = JSON.parse(qrCode);
+        bookingData = JSON.parse(trimmedQrCode);
         console.log('Parsed JSON booking data:', bookingData);
       } catch {
         // If not JSON, treat as booking ID
         console.log('Not JSON, treating as booking ID');
-        const booking = bookings.find(b => b.qrCode === qrCode || b.id.toString() === qrCode);
+        const booking = bookings.find(b => 
+          b.qrCode === trimmedQrCode || 
+          b.id.toString() === trimmedQrCode ||
+          b.id.toString() === qrCode.trim()
+        );
         console.log('Found booking by ID/QR:', booking);
         if (booking) {
           bookingData = booking;
         } else {
-          alert('Invalid QR code. Booking not found.');
+          console.log('No booking found with QR code:', trimmedQrCode);
+          console.log('No booking found with ID:', trimmedQrCode);
+          alert(`Invalid QR code. Booking not found.\n\nQR Code: ${trimmedQrCode}\n\nAvailable booking IDs: ${bookings.map(b => b.id).join(', ')}`);
           return;
         }
       }
