@@ -718,14 +718,17 @@ export default function SevaList() {
                     <p><strong>Duration:</strong> {seva.duration}</p>
                     <p><strong>Cost:</strong> <span className="text-orange-600 font-bold">{seva.cost}</span></p>
                   </div>
-                  {isAdmin && (
-                    <button
-                      onClick={() => handleBookSeva(seva)}
-                      className="w-full py-2 px-4 rounded-md transition-colors duration-200 touch-target bg-orange-600 text-white hover:bg-orange-700"
-                    >
-                      Book Seva
-                    </button>
-                  )}
+                  <button
+                    onClick={() => isAdmin ? handleBookSeva(seva) : null}
+                    className={`w-full py-2 px-4 rounded-md transition-colors duration-200 touch-target ${
+                      isAdmin 
+                        ? 'bg-orange-600 text-white hover:bg-orange-700' 
+                        : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                    }`}
+                    disabled={!isAdmin}
+                  >
+                    {isAdmin ? 'Book Seva' : 'Contact Office to Book'}
+                  </button>
                 </div>
               ))}
             </div>
@@ -748,14 +751,17 @@ export default function SevaList() {
                       </ul>
                     </div>
                   </div>
-                  {isAdmin && (
-                    <button
-                      onClick={() => handleBookHall(hall)}
-                      className="w-full py-2 px-4 rounded-md transition-colors duration-200 touch-target bg-orange-600 text-white hover:bg-orange-700"
-                    >
-                      Book Hall
-                    </button>
-                  )}
+                  <button
+                    onClick={() => isAdmin ? handleBookHall(hall) : null}
+                    className={`w-full py-2 px-4 rounded-md transition-colors duration-200 touch-target ${
+                      isAdmin 
+                        ? 'bg-orange-600 text-white hover:bg-orange-700' 
+                        : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                    }`}
+                    disabled={!isAdmin}
+                  >
+                    {isAdmin ? 'Book Hall' : 'Contact Office to Book'}
+                  </button>
                 </div>
               ))}
             </div>
