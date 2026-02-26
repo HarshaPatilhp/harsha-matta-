@@ -87,7 +87,7 @@ export default function SevaList() {
       const qrImageUrl = await uploadQrToCloudinary(bookingData.id);
       console.log('QR uploaded to Cloudinary:', qrImageUrl);
 
-      const templateParams = {
+const templateParams = {
         to_email: bookingData.email,
         devotee_name: bookingData.devoteeName,
         seva_name: bookingData.sevaName,
@@ -97,7 +97,13 @@ export default function SevaList() {
         date: bookingData.date,
         time: bookingData.time,
         number_of_people: bookingData.numberOfPeople,
+        gotra: bookingData.gotra,
+        nakshatra: bookingData.nakshatra,
+        hall_location: bookingData.hall,
         cost: bookingData.sevaCost,
+        seva_cost: bookingData.sevaCost,
+        tirtha_prasada: bookingData.lunchCost > 0 ? `₹${bookingData.lunchCost} (${bookingData.lunchCount} people × ₹250)` : 'Not required',
+        total_cost: `₹${bookingData.totalCost}`,
       };
 
       await emailjs.send(
