@@ -102,17 +102,41 @@ export default function Header() {
             <Link href="/contact" className="hover:text-orange-200 transition-colors">Contact</Link>
           </nav>
 
-          {/* Volunteer Login Button - Extreme right side */}
+          {/* User Info / Login Button - Extreme right side */}
           <div className="hidden md:flex">
-            <Link href="/login" className="hover:text-orange-200 transition-colors flex items-center bg-white text-orange-600 px-4 py-2 rounded-full ml-8">
-              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 7h-4l-4-4h4" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 3h6v6h-6" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12h10l-5-5" />
-              </svg>
-              Login
-            </Link>
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center bg-white text-orange-600 px-4 py-2 rounded-full">
+                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                    <path d="M12 3a4 4 0 100 8 4 4 0 000-8z" />
+                  </svg>
+                  <span className="font-semibold">{user?.name}</span>
+                  {user?.role === 'admin' && (
+                    <span className="ml-2 text-xs bg-orange-600 text-white px-2 py-1 rounded-full">Admin</span>
+                  )}
+                </div>
+                <button
+                  onClick={logout}
+                  className="hover:text-orange-200 transition-colors flex items-center bg-red-600 text-white px-4 py-2 rounded-full"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link href="/login" className="hover:text-orange-200 transition-colors flex items-center bg-white text-orange-600 px-4 py-2 rounded-full ml-8">
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 7h-4l-4-4h4" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 3h6v6h-6" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12h10l-5-5" />
+                </svg>
+                Login
+              </Link>
+            )}
           </div>
         </div>
 
@@ -149,20 +173,45 @@ export default function Header() {
 
                 <Link href="/contact" className="hover:text-orange-200 transition-colors py-2 block">Contact</Link>
 
-                
- {/* Volunteer Login Button - Extreme Right */}
-<div className="hidden md:flex absolute right-4">
-  <Link
-    href="/login"
-    className="flex items-center bg-white text-orange-600 px-3 py-1 rounded-full hover:bg-orange-50 transition"
-  >
-    <svg className="w-2 h-2 mr-2" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-      <path d="M12 3a4 4 0 100 8 4 4 0 000-8z" />
-    </svg>
-    Login
-  </Link>
-</div>
+              {/* Mobile User Info / Login */}
+              {isAuthenticated ? (
+                <div className="border-t border-orange-500 pt-2 mt-2">
+                  <div className="flex items-center justify-between bg-white text-orange-600 px-3 py-2 rounded-full mb-2">
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                        <path d="M12 3a4 4 0 100 8 4 4 0 000-8z" />
+                      </svg>
+                      <span className="font-semibold text-sm">{user?.name}</span>
+                      {user?.role === 'admin' && (
+                        <span className="ml-2 text-xs bg-orange-600 text-white px-2 py-1 rounded-full">Admin</span>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    onClick={logout}
+                    className="w-full hover:text-orange-200 transition-colors flex items-center bg-red-600 text-white px-3 py-2 rounded-full justify-center"
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <div className="border-t border-orange-500 pt-2 mt-2">
+                  <Link
+                    href="/login"
+                    className="flex items-center bg-white text-orange-600 px-3 py-2 rounded-full hover:bg-orange-50 transition justify-center"
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                      <path d="M12 3a4 4 0 100 8 4 4 0 000-8z" />
+                    </svg>
+                    Login
+                  </Link>
+                </div>
+              )}
 
 
               </nav>
