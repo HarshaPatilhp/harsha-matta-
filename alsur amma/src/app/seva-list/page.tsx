@@ -507,17 +507,30 @@ export default function SevaList() {
   ];
 
   const handleBookSeva = (seva: Seva) => {
+    if (!isAdmin) {
+      alert('Only administrators can book sevas. Please contact the temple office for booking.');
+      return;
+    }
     setSelectedSeva(seva);
     setShowBookingForm(true);
     setTirthaPrasadaRequired(false);
   };
 
   const handleBookHall = (hall: Hall) => {
+    if (!isAdmin) {
+      alert('Only administrators can book halls. Please contact the temple office for booking.');
+      return;
+    }
     setSelectedHall(hall);
     setShowHallBookingForm(true);
   };
 
   const handleBookingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (!isAdmin) {
+      alert('Only administrators can submit bookings. Please contact the temple office for booking.');
+      return;
+    }
+    
     e.preventDefault();
     setIsSubmitting(true);
 
