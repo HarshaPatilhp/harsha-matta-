@@ -113,10 +113,52 @@ const templateParams = {
       );
 
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('EmailJS error:', error);
-      console.error('EmailJS error details:', JSON.stringify(error, null, 2));
-      alert(`EmailJS Error: ${JSON.stringify(error, null, 2)}`);
+      
+      // Provide better error messages for different scenarios
+      let errorMessage = 'Unknown email sending error occurred.';
+      
+      if (!error) {
+        errorMessage = 'Email sending failed. Please check your internet connection and try again.';
+      } else if (typeof error === 'string') {
+        errorMessage = `Email sending failed: ${error}`;
+      } else if (error.text) {
+        errorMessage = `Email sending failed: ${error.text}`;
+      } else if (error.message) {
+        errorMessage = `Email sending failed: ${error.message}`;
+      } else if (error.status) {
+        switch (error.status) {
+          case 400:
+            errorMessage = 'Email sending failed: Invalid email configuration or missing required fields.';
+            break;
+          case 401:
+            errorMessage = 'Email sending failed: Authentication error with email service.';
+            break;
+          case 429:
+            errorMessage = 'Email sending failed: Too many requests. Please try again later.';
+            break;
+          case 500:
+            errorMessage = 'Email sending failed: Server error. Please try again later.';
+            break;
+          default:
+            errorMessage = `Email sending failed with status ${error.status}.`;
+        }
+      } else {
+        // Try to stringify the error for debugging
+        try {
+          const errorString = JSON.stringify(error, null, 2);
+          console.error('EmailJS error details:', errorString);
+          if (errorString !== '{}' && errorString !== 'null' && errorString !== 'undefined') {
+            errorMessage = `Email sending failed: ${errorString}`;
+          }
+        } catch (stringifyError) {
+          console.error('Could not stringify error:', stringifyError);
+          errorMessage = 'Email sending failed due to an unexpected error.';
+        }
+      }
+      
+      alert(`Email Error: ${errorMessage}\n\nYour booking has been saved locally. Please contact the temple office to confirm your booking.`);
       return false;
     }
   };
