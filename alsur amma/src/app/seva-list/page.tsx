@@ -603,18 +603,18 @@ export default function SevaList() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="bg-gradient-to-r from-orange-600 to-orange-800 text-white py-16">
+      <section className="bg-gradient-to-r from-orange-600 to-orange-800 text-white py-12 md:py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">Seva & Hall Booking</h1>
-          <p className="text-xl text-center max-w-3xl mx-auto mb-8">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-4">Seva & Hall Booking</h1>
+          <p className="text-lg md:text-xl text-center max-w-3xl mx-auto mb-8 px-4">
             Participate in divine service and book halls for events and ceremonies
           </p>
           
           {/* Tab Navigation */}
-          <div className="flex justify-center space-x-4">
+          <div className="flex justify-center space-x-2 md:space-x-4 px-4">
             <button
               onClick={() => setActiveTab('seva')}
-              className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+              className={`px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-colors text-sm md:text-base ${
                 activeTab === 'seva'
                   ? 'bg-white text-orange-600'
                   : 'bg-orange-700 text-white hover:bg-orange-600'
@@ -624,7 +624,7 @@ export default function SevaList() {
             </button>
             <button
               onClick={() => setActiveTab('hall')}
-              className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+              className={`px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-colors text-sm md:text-base ${
                 activeTab === 'hall'
                   ? 'bg-white text-orange-600'
                   : 'bg-orange-700 text-white hover:bg-orange-600'
@@ -641,25 +641,27 @@ export default function SevaList() {
         <div className="max-w-6xl mx-auto">
           {/* Admin Notice */}
           {!isAuthenticated && (
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 mb-8 rounded-lg">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 md:p-6 mb-6 md:mb-8 rounded-lg">
+              <div className="flex flex-col md:flex-row">
+                <div className="flex-shrink-0 mb-3 md:mb-0">
+                  <svg className="h-5 w-5 md:h-6 md:w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <div className="ml-3">
-                  <h3 className="text-lg font-medium text-yellow-800">Admin Login Required for Booking</h3>
+                <div className="md:ml-3">
+                  <h3 className="text-base md:text-lg font-medium text-yellow-800">Admin Login Required for Booking</h3>
                   <div className="mt-2 text-sm text-yellow-700">
                     <p>
                       Seva and hall bookings can only be made by authorized administrators. 
                       Please contact the temple office directly to make your booking.
                     </p>
-                    <div className="mt-4 bg-white rounded-lg p-4 border border-yellow-200">
-                      <h4 className="font-semibold text-gray-800 mb-2">📞 Temple Office Contact:</h4>
-                      <p className="text-gray-600">Phone: +91-XXXXXXXXXX</p>
-                      <p className="text-gray-600">Email: info@vidyaranyapuramutt.org</p>
-                      <p className="text-gray-600">Address: Sri Vidyaranyapura Mutt, Bangalore</p>
+                    <div className="mt-3 md:mt-4 bg-white rounded-lg p-3 md:p-4 border border-yellow-200">
+                      <h4 className="font-semibold text-gray-800 mb-2 text-sm md:text-base">📞 Temple Office Contact:</h4>
+                      <div className="space-y-1 text-xs md:text-sm text-gray-600">
+                        <p>Phone: +91-XXXXXXXXXX</p>
+                        <p>Email: info@vidyaranyapuramutt.org</p>
+                        <p>Address: Sri Vidyaranyapura Mutt, Bangalore</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -668,25 +670,27 @@ export default function SevaList() {
           )}
 
           {isAuthenticated && !isAdmin && (
-            <div className="bg-red-50 border-l-4 border-red-400 p-6 mb-8 rounded-lg">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <div className="bg-red-50 border-l-4 border-red-400 p-4 md:p-6 mb-6 md:mb-8 rounded-lg">
+              <div className="flex flex-col md:flex-row">
+                <div className="flex-shrink-0 mb-3 md:mb-0">
+                  <svg className="h-5 w-5 md:h-6 md:w-6 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <div className="ml-3">
-                  <h3 className="text-lg font-medium text-red-800">Access Denied</h3>
+                <div className="md:ml-3">
+                  <h3 className="text-base md:text-lg font-medium text-red-800">Access Denied</h3>
                   <div className="mt-2 text-sm text-red-700">
                     <p>
                       Your account does not have administrator privileges for booking. 
                       Only administrators can make seva and hall bookings.
                     </p>
-                    <div className="mt-4 bg-white rounded-lg p-4 border border-red-200">
-                      <h4 className="font-semibold text-gray-800 mb-2">📞 Temple Office Contact:</h4>
-                      <p className="text-gray-600">Phone: +91-XXXXXXXXXX</p>
-                      <p className="text-gray-600">Email: info@vidyaranyapuramutt.org</p>
-                      <p className="text-gray-600">Address: Sri Vidyaranyapura Mutt, Bangalore</p>
+                    <div className="mt-3 md:mt-4 bg-white rounded-lg p-3 md:p-4 border border-red-200">
+                      <h4 className="font-semibold text-gray-800 mb-2 text-sm md:text-base">📞 Temple Office Contact:</h4>
+                      <div className="space-y-1 text-xs md:text-sm text-gray-600">
+                        <p>Phone: +91-XXXXXXXXXX</p>
+                        <p>Email: info@vidyaranyapuramutt.org</p>
+                        <p>Address: Sri Vidyaranyapura Mutt, Bangalore</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -695,11 +699,11 @@ export default function SevaList() {
           )}
 
           {/* Introduction */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
               {activeTab === 'seva' ? 'Divine Services' : 'Hall Booking'}
             </h2>
-            <p className="text-lg text-gray-600 leading-relaxed text-center max-w-4xl mx-auto">
+            <p className="text-base md:text-lg text-gray-600 leading-relaxed text-center max-w-4xl mx-auto">
               {activeTab === 'seva' 
                 ? 'Seva (service) is a sacred opportunity to participate in divine activities and earn spiritual merit. Our mutt offers various forms of seva that allow devotees to contribute to the maintenance of religious traditions and receive blessings. All sevas are performed with devotion and precision.'
                 : 'Book our well-equipped halls for your events, ceremonies, and gatherings. We offer various halls with different capacities and facilities to suit your needs. All halls are maintained with traditional values and modern amenities.'
@@ -710,19 +714,19 @@ export default function SevaList() {
           {/* Conditional Content */}
           {activeTab === 'seva' ? (
             /* Sevas Grid */
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {sevas.map((seva) => (
-                <div key={seva.id} className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 p-6 card">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-3">{seva.name}</h3>
-                  <p className="text-gray-600 mb-4">{seva.description}</p>
-                  <div className="space-y-2 text-sm text-gray-500 mb-4">
+                <div key={seva.id} className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 p-4 md:p-6 card">
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-800 mb-3">{seva.name}</h3>
+                  <p className="text-sm md:text-base text-gray-600 mb-4">{seva.description}</p>
+                  <div className="space-y-2 text-xs md:text-sm text-gray-500 mb-4">
                     <p><strong>Time:</strong> {seva.time}</p>
                     <p><strong>Duration:</strong> {seva.duration}</p>
                     <p><strong>Cost:</strong> <span className="text-orange-600 font-bold">{seva.cost}</span></p>
                   </div>
                   <button
                     onClick={() => isAdmin ? handleBookSeva(seva) : null}
-                    className={`w-full py-2 px-4 rounded-md transition-colors duration-200 touch-target ${
+                    className={`w-full py-2 px-3 md:px-4 rounded-md transition-colors duration-200 touch-target text-sm md:text-base ${
                       isAdmin 
                         ? 'bg-orange-600 text-white hover:bg-orange-700' 
                         : 'bg-gray-400 text-gray-200 cursor-not-allowed'
@@ -736,12 +740,12 @@ export default function SevaList() {
             </div>
           ) : (
             /* Halls Grid */
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {halls.map((hall) => (
-                <div key={hall.id} className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 p-6 card">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-3">{hall.name}</h3>
-                  <p className="text-gray-600 mb-4">{hall.description}</p>
-                  <div className="space-y-2 text-sm text-gray-500 mb-4">
+                <div key={hall.id} className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 p-4 md:p-6 card">
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-800 mb-3">{hall.name}</h3>
+                  <p className="text-sm md:text-base text-gray-600 mb-4">{hall.description}</p>
+                  <div className="space-y-2 text-xs md:text-sm text-gray-500 mb-4">
                     <p><strong>Capacity:</strong> {hall.capacity}</p>
                     <p><strong>Cost:</strong> <span className="text-orange-600 font-bold">{hall.cost}</span></p>
                     <div className="mt-2">
@@ -755,7 +759,7 @@ export default function SevaList() {
                   </div>
                   <button
                     onClick={() => isAdmin ? handleBookHall(hall) : null}
-                    className={`w-full py-2 px-4 rounded-md transition-colors duration-200 touch-target ${
+                    className={`w-full py-2 px-3 md:px-4 rounded-md transition-colors duration-200 touch-target text-sm md:text-base ${
                       isAdmin 
                         ? 'bg-orange-600 text-white hover:bg-orange-700' 
                         : 'bg-gray-400 text-gray-200 cursor-not-allowed'

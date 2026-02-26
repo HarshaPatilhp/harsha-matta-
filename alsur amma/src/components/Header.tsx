@@ -12,18 +12,18 @@ export default function Header() {
     <header className="bg-orange-600 text-white shadow-lg">
       <div className="container mx-auto px-4">
         {/* Logo Section */}
-        <div className="flex justify-center items-center py-4 space-x-4">
-         <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-black">
+        <div className="flex flex-col md:flex-row justify-center items-center py-4 md:py-6 space-y-4 md:space-y-0 md:space-x-4">
+         <div className="w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-black flex-shrink-0">
             <img 
               src="images/6.jpg"
               alt="Mathaji Ulsooramma Raghavendra Swamy Mutt" 
               className="w-full h-full object-cover"
             />
           </div>
-          <Link href="/" className="text-2xl md:text-5xl font-bold tracking-wider">
-            Mathaji Ulsooramma Raghavendra Swamy Mutt
+          <Link href="/" className="text-xl md:text-4xl lg:text-5xl font-bold tracking-wider text-center px-4">
+            Mathaji Ulsooramma<br className="md:hidden" /> Raghavendra Swamy Mutt
           </Link>
-          <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-black">
+          <div className="w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-black flex-shrink-0">
             <img 
               src="images/7.jpeg"
               alt="Mathaji Ulsooramma Raghavendra Swamy Mutt" 
@@ -33,10 +33,10 @@ export default function Header() {
         </div>
 
         {/* Navigation Section */}
-        <div className="flex justify-center pb-4">
+        <div className="relative pb-4">
           {/* Mobile menu button */}
           <button
-            className="md:hidden absolute right-4 top-4"
+            className="md:hidden absolute right-4 top-0 z-50"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -44,8 +44,8 @@ export default function Header() {
             </svg>
           </button>
 
-          <div className="flex justify-between items-center">
-            <nav className="hidden md:flex space-x-8">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <nav className="hidden md:flex space-x-6 lg:space-x-8 text-sm lg:text-base">
               <Link href="/" className="hover:text-orange-200 transition-colors">Home</Link>
 
               {/* About Us Dropdown */}
@@ -102,7 +102,33 @@ export default function Header() {
             <Link href="/contact" className="hover:text-orange-200 transition-colors">Contact</Link>
           </nav>
 
-          {/* User Info / Login Button - Extreme right side */}
+          {/* User Info / Login Button - Right side */}
+          <div className="flex md:hidden items-center">
+            {isAuthenticated ? (
+              <div className="flex items-center gap-2">
+                <div className="flex items-center bg-white text-orange-600 px-2 py-1 rounded-full">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                    <path d="M12 3a4 4 0 100 8 4 4 0 000-8z" />
+                  </svg>
+                  <span className="font-semibold text-xs whitespace-nowrap">
+                    {user?.name}
+                  </span>
+                </div>
+                <button
+                  onClick={logout}
+                  className="flex items-center bg-red-600 text-white px-2 py-1 rounded-full text-xs"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link href="/login" className="flex items-center bg-white text-orange-600 px-2 py-1 rounded-full text-xs">
+                Login
+              </Link>
+            )}
+          </div>
+
           <div className="hidden md:flex">
   {isAuthenticated ? (
     <div className="flex items-center gap-4">
