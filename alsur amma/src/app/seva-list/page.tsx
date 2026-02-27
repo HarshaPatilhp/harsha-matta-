@@ -47,13 +47,18 @@ export default function SevaList() {
 
   const sendBookingEmail = async (bookingData: any) => {
     try {
+      console.log('🔍 [DEBUG] sendBookingEmail called with bookingData:', bookingData);
+      
       // Upload QR to Cloudinary
       const uploadQrToCloudinary = async (bookingId: number) => {
+        console.log('🔍 [DEBUG] Starting QR upload for booking ID:', bookingId);
+        
         // 1️⃣ Generate QR as base64
         const qrDataUrl = await QRCode.toDataURL(bookingId.toString(), {
           width: 300,
           margin: 2,
         });
+        console.log('🔍 [DEBUG] QR generated as data URL');
 
         // 2️⃣ Prepare upload
         const formData = new FormData();
@@ -65,6 +70,7 @@ export default function SevaList() {
         formData.append("format", "png"); // Ensure PNG format for better quality
 
         // 3️⃣ Upload to Cloudinary
+        console.log('🔍 [DEBUG] Uploading QR to Cloudinary...');
         const response = await fetch(
           "https://api.cloudinary.com/v1_1/dcpb7thpb/image/upload",
           {
@@ -74,37 +80,45 @@ export default function SevaList() {
         );
 
         const data = await response.json();
-        console.log('Cloudinary response:', data);
+        console.log('🔍 [DEBUG] Cloudinary response:', data);
+        console.log('🔍 [DEBUG] Response status:', response.status);
+        console.log('🔍 [DEBUG] Response ok:', response.ok);
         
-        if (!data.secure_url) {
-          throw new Error("QR upload failed");
+        if (!response.ok || !data.secure_url) {
+          console.error('🔍 [DEBUG] QR upload failed. Response:', data);
+          throw new Error(`QR upload failed: ${response.status} - ${data.error?.message || data.message || 'Unknown error'}`);
         }
         
+        console.log('🔍 [DEBUG] QR uploaded successfully to:', data.secure_url);
         return data.secure_url; // ✅ THIS IS THE QR IMAGE URL
       };
 
       // Call the Cloudinary upload function
       const qrImageUrl = await uploadQrToCloudinary(bookingData.id);
-      console.log('QR uploaded to Cloudinary:', qrImageUrl);
+      console.log('🔍 [DEBUG] QR upload completed. URL:', qrImageUrl);
 
-const templateParams = {
-        to_email: bookingData.email,
-        devotee_name: bookingData.devoteeName,
-        seva_name: bookingData.sevaName,
-        booking_id: bookingData.id,
-        qr_id: bookingData.id,
-        qr_code: qrImageUrl, // Use Cloudinary URL
-        date: bookingData.date,
-        time: bookingData.time,
-        number_of_people: bookingData.numberOfPeople,
-        gotra: bookingData.gotra,
-        nakshatra: bookingData.nakshatra,
-        hall_location: bookingData.hall,
-        cost: bookingData.sevaCost,
-        seva_cost: bookingData.sevaCost,
+      // Explicitly map all required fields with proper validation
+      console.log('🔍 [DEBUG] Creating EmailJS templateParams...');
+      const templateParams = {
+        to_email: bookingData.email || 'not-provided',
+        devotee_name: bookingData.devoteeName || 'not-provided',
+        seva_name: bookingData.sevaName || 'not-provided',
+        seva_date: bookingData.date || 'not-provided', // Fixed: should be seva_date not date
+        booking_id: bookingData.id || 'not-provided',
+        qr_id: bookingData.id || 'not-provided',
+        qr_code: qrImageUrl || 'not-provided',
+        time: bookingData.time || 'not-provided',
+        people_count: bookingData.numberOfPeople || 'not-provided', // Fixed: should be people_count not number_of_people
+        gotra: bookingData.gotra || 'not-provided',
+        nakshatra: bookingData.nakshatra || 'not-provided',
+        hall_location: bookingData.hall || 'not-provided',
+        seva_cost: bookingData.sevaCost || 'not-provided',
         tirtha_prasada: bookingData.lunchCost > 0 ? `₹${bookingData.lunchCost} (${bookingData.lunchCount} people × ₹250)` : 'Not required',
-        total_cost: `₹${bookingData.totalCost}`,
+        total_cost: `₹${bookingData.totalCost}` || 'not-provided',
       };
+
+      console.log('🔍 [DEBUG] EmailJS templateParams:', templateParams);
+      console.log('🔍 [DEBUG] Sending email via EmailJS...');
 
       await emailjs.send(
         'service_7cfhrr5', // Replace with your EmailJS service ID
@@ -112,9 +126,13 @@ const templateParams = {
         templateParams
       );
 
+      console.log('🔍 [DEBUG] Email sent successfully via EmailJS');
       return true;
     } catch (error: any) {
-      console.error('EmailJS error:', error);
+      console.error('🔍 [DEBUG] EmailJS error:', error);
+      console.error('🔍 [DEBUG] Error type:', typeof error);
+      console.error('🔍 [DEBUG] Error message:', error.message);
+      console.error('🔍 [DEBUG] Error status:', error.status);
       
       // Provide better error messages for different scenarios
       let errorMessage = 'Unknown email sending error occurred.';
@@ -148,12 +166,12 @@ const templateParams = {
         // Try to stringify the error for debugging
         try {
           const errorString = JSON.stringify(error, null, 2);
-          console.error('EmailJS error details:', errorString);
+          console.error('🔍 [DEBUG] EmailJS error details:', errorString);
           if (errorString !== '{}' && errorString !== 'null' && errorString !== 'undefined') {
             errorMessage = `Email sending failed: ${errorString}`;
           }
         } catch (stringifyError) {
-          console.error('Could not stringify error:', stringifyError);
+          console.error('🔍 [DEBUG] Could not stringify error:', stringifyError);
           errorMessage = 'Email sending failed due to an unexpected error.';
         }
       }
@@ -585,10 +603,18 @@ const templateParams = {
     setIsSubmitting(true);
 
     try {
+      console.log('🔍 [DEBUG] handleBookingSubmit started');
+      console.log('🔍 [DEBUG] selectedSeva:', selectedSeva);
+      
       const formData = new FormData(e.currentTarget);
+      console.log('🔍 [DEBUG] FormData entries:');
+      for (let [key, value] of formData.entries()) {
+        console.log(`🔍 [DEBUG]   ${key}: ${value}`);
+      }
       
       // Generate booking ID first
       const bookingId = Date.now();
+      console.log('🔍 [DEBUG] Generated booking ID:', bookingId);
 
       const bookingData = {
         id: bookingId,
@@ -621,18 +647,25 @@ const templateParams = {
         createdAt: new Date().toISOString()
       };
 
+      console.log('🔍 [DEBUG] Created bookingData:', bookingData);
+
       // Save to localStorage
       const existingBookings = JSON.parse(localStorage.getItem('temple_bookings') || '[]');
       existingBookings.push(bookingData);
       localStorage.setItem('temple_bookings', JSON.stringify(existingBookings));
+      console.log('🔍 [DEBUG] Booking saved to localStorage. Total bookings:', existingBookings.length);
 
       // Send email with QR code
       try {
+        console.log('🔍 [DEBUG] Starting email sending process...');
         const emailSent = await sendBookingEmail(bookingData);
+        console.log('🔍 [DEBUG] Email sending result:', emailSent);
 
         if (emailSent) {
+          console.log('🔍 [DEBUG] Email sent successfully, showing success message');
           alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Confirmation email sent successfully.`);
         } else {
+          console.log('🔍 [DEBUG] Email failed, showing fallback message');
           alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Email sending failed, but booking is saved.`);
         }
       } catch (error) {
