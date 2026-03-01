@@ -98,6 +98,14 @@ export default function SevaList() {
       // Call the Cloudinary upload function
       const qrImageUrl = await uploadQrToCloudinary(bookingData.id);
       console.log('🔍 [DEBUG] QR upload completed. URL:', qrImageUrl);
+      
+      // Validate QR image URL before proceeding
+      if (!qrImageUrl || typeof qrImageUrl !== 'string' || !qrImageUrl.startsWith('http')) {
+        console.error('🔍 [DEBUG] Invalid QR image URL:', qrImageUrl);
+        throw new Error(`Invalid QR image URL: ${qrImageUrl}`);
+      }
+      
+      console.log('🔍 [DEBUG] QR image URL validated successfully');
 
       // Explicitly map all required fields with proper validation
       console.log('🔍 [DEBUG] Creating EmailJS templateParams...');
@@ -108,7 +116,7 @@ export default function SevaList() {
         seva_date: bookingData.date || 'not-provided', // Fixed: should be seva_date not date
         booking_id: bookingData.id || 'not-provided',
         qr_id: bookingData.id || 'not-provided',
-        qr_code: qrImageUrl || 'not-provided',
+        qr_code: qrImageUrl || 'not-provided', // Use Cloudinary URL
         time: bookingData.time || 'not-provided',
         people_count: bookingData.numberOfPeople || 'not-provided', // Fixed: should be people_count not number_of_people
         gotra: bookingData.gotra || 'not-provided',
@@ -120,6 +128,7 @@ export default function SevaList() {
       };
 
       console.log('🔍 [DEBUG] EmailJS templateParams:', templateParams);
+      console.log('🔍 [DEBUG] QR code URL in templateParams:', templateParams.qr_code);
       console.log('🔍 [DEBUG] Sending email via EmailJS...');
       
       // Check network connectivity
