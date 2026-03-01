@@ -49,6 +49,8 @@ export default function SevaList() {
     try {
       console.log('🔍 [DEBUG] sendBookingEmail called with bookingData:', bookingData);
       
+      console.log('🔍 [DEBUG] EmailJS initialized successfully');
+      
       // Upload QR to Cloudinary
       const uploadQrToCloudinary = async (bookingId: number) => {
         console.log('🔍 [DEBUG] Starting QR upload for booking ID:', bookingId);
@@ -119,13 +121,33 @@ export default function SevaList() {
 
       console.log('🔍 [DEBUG] EmailJS templateParams:', templateParams);
       console.log('🔍 [DEBUG] Sending email via EmailJS...');
+      
+      // Check network connectivity
+      if (!navigator.onLine) {
+        throw new Error('No internet connection. Please check your network and try again.');
+      }
+      
+      console.log('🔍 [DEBUG] Network connection available');
+      
+      // Validate EmailJS service and template
+      console.log('🔍 [DEBUG] Validating EmailJS service and template...');
+      const serviceId = 'service_7cfhrr5';
+      const templateId = 'template_umwnbkd';
+      
+      if (!serviceId || !templateId) {
+        throw new Error('EmailJS service ID or template ID is missing.');
+      }
+      
+      console.log('🔍 [DEBUG] EmailJS service ID:', serviceId);
+      console.log('🔍 [DEBUG] EmailJS template ID:', templateId);
 
-      await emailjs.send(
-        'service_7cfhrr5', // Replace with your EmailJS service ID
-        'template_umwnbkd', // Replace with your EmailJS template ID
+      const result = await emailjs.send(
+        serviceId,
+        templateId,
         templateParams
       );
-
+      
+      console.log('🔍 [DEBUG] EmailJS send result:', result);
       console.log('🔍 [DEBUG] Email sent successfully via EmailJS');
       return true;
     } catch (error: any) {
