@@ -69,7 +69,7 @@ export default function SevaList() {
         formData.append("folder", "qrcodes"); // optional but clean
         formData.append("public_id", `qr_${bookingId}`); // unique QR
         formData.append("quality", "100"); // Prevent compression
-        formData.append("format", "png"); // Ensure PNG format for better quality
+        // Note: format parameter is not allowed in unsigned uploads
 
         // 3️⃣ Upload to Cloudinary
         console.log('🔍 [DEBUG] Uploading QR to Cloudinary...');
