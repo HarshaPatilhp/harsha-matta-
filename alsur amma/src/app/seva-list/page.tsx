@@ -772,7 +772,7 @@ export default function SevaList() {
                       <div className="space-y-1 text-xs md:text-sm text-gray-600">
                         <p>Phone: +91-XXXXXXXXXX</p>
                         <p>Email: info@vidyaranyapuramutt.org</p>
-                        <p>Address: Sri Vidyaranyapura Mutt, Bangalore</p>
+                        <p>Address: Mathaji Ulsooramma Raghavendra Swamy Mutt, Vidyaranyapura, Bangalore</p>
                       </div>
                     </div>
                   </div>

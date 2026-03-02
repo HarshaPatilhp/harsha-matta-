@@ -60,6 +60,18 @@ export default function DashboardContent() {
   useEffect(() => {
     // Initialize EmailJS with your public key
     emailjs.init('bfEoBkT_7gXKCRsGg'); // Replace with your EmailJS public key
+    
+    // Load scan history from localStorage
+    const savedScanHistory = localStorage.getItem('scanHistory');
+    if (savedScanHistory) {
+      try {
+        const parsedHistory = JSON.parse(savedScanHistory);
+        console.log('🔍 [DEBUG] Loaded scan history from localStorage:', parsedHistory);
+        setScanHistory(parsedHistory);
+      } catch (error) {
+        console.error('🔍 [DEBUG] Error loading scan history:', error);
+      }
+    }
   }, []);
   const startQRScan = async () => {
     console.log('Starting QR scan...');
@@ -102,6 +114,8 @@ export default function DashboardContent() {
       console.log('QR Scanner started successfully');
 
       qrScannerRef.current = qrScanner;
+      await qrScanner.start();
+      console.log('QR scanner started successfully');
 
     } catch (error) {
       console.error('Error starting QR scanner:', error);
@@ -218,23 +232,7 @@ export default function DashboardContent() {
             gotra.toLowerCase().includes(bg.toLowerCase())
           );
 
-          const brahminInfo = isBrahmin ? 'Yes - Brahmin' : gotra ? 'No - Non-Brahmin' : 'Unknown';
-
-          // Add to scan history
-          const scanEntry: ScanHistory = {
-            id: Date.now(),
-            bookingId: bookingData.id,
-            devoteeName: bookingData.devoteeName || bookingData.fullName,
-            sevaName: bookingData.sevaName,
-            scanTime: new Date().toLocaleString(),
-            status: 'Verified'
-          };
-          setScanHistory(prev => [scanEntry, ...prev]);
-
-          // Send completion email with review request
-          sendCompletionEmail(bookingData);
-
-          // Enhanced alert with lunch and caste information
+          const brahminInfo = isBrahmin ? 'Brahmin (eligible for special ceremonies)' : 'Non-Brahmin';
           const numberOfPeople = parseInt(bookingData.numberOfPeople) || 1;
           const memberEntryMessage = numberOfPeople > 1 
             ? `\n\n📝 Member Entry Tracking:\n${numberOfPeople} members registered. Please mark how many have actually entered.`
