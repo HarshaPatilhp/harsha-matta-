@@ -107,7 +107,7 @@ export default function Home() {
         {/* Contact Information */}
         <section className="bg-orange-600 text-white py-12 rounded-lg">
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-6">Vidyaranyapura Raghavendra Swamy Mutt</h2>
+            <h2 className="text-3xl font-bold mb-6">Mathaji Ulsooramma Raghavendra Swamy Mutt</h2>
             <p className="text-lg mb-8">
               CA Site No. 8, 6th Main Road, BEL Layout, 3rd Block, Vidyaranyapura, Bangalore-560097
             </p>

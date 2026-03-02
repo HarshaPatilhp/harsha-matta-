@@ -248,6 +248,32 @@ export default function DashboardContent() {
                 `🆔 Booking ID: ${bookingData.id}` +
                 memberEntryMessage);
 
+          // Add to scan history
+          const scanEntry: ScanHistory = {
+            id: Date.now(),
+            devoteeName: bookingData.devoteeName || bookingData.fullName,
+            sevaName: bookingData.sevaName,
+            bookingId: bookingData.id,
+            scanTime: new Date().toLocaleString(),
+            status: 'Verified'
+          };
+          
+          console.log('🔍 [DEBUG] Adding new scan entry:', scanEntry);
+          setScanHistory(prev => {
+            const newHistory = [scanEntry, ...prev];
+            console.log('🔍 [DEBUG] Updated scan history:', newHistory);
+            
+            // Save to localStorage for persistence
+            try {
+              localStorage.setItem('scanHistory', JSON.stringify(newHistory));
+              console.log('🔍 [DEBUG] Saved scan history to localStorage');
+            } catch (error) {
+              console.error('🔍 [DEBUG] Error saving scan history:', error);
+            }
+            
+            return newHistory;
+          });
+
           // If multiple people, show member entry dialog
           if (numberOfPeople > 1) {
             setTimeout(() => {

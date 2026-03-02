@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About Section */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Vidyaranyapura Raghavendra Swamy Mutt</h3>
+            <h3 className="text-lg font-semibold mb-4">Mathaji Ulsooramma Raghavendra Swamy Mutt</h3>
             <p className="text-gray-400 text-sm">
               CA Site No. 8, 6th Main Road, BEL Layout, 3rd Block, Vidyaranyapura, Bangalore-560097
             </p>
