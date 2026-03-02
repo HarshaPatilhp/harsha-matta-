@@ -190,18 +190,35 @@ export default function DashboardContent() {
       } catch {
         // If not JSON, treat as booking ID
         console.log('Not JSON, treating as booking ID');
-        const booking = bookings.find(b => 
-          b.qrCode === trimmedQrCode || 
-          b.id.toString() === trimmedQrCode ||
-          b.id.toString() === qrCode.trim()
-        );
+        
+        // More robust booking lookup with multiple comparison methods
+        const booking = bookings.find(b => {
+          const bookingIdStr = b.id.toString();
+          const qrCodeStr = b.qrCode?.toString() || '';
+          const scannedQrStr = trimmedQrCode.toString();
+          
+          console.log('🔍 [DEBUG] Comparing:', {
+            bookingId: bookingIdStr,
+            qrCode: qrCodeStr,
+            scanned: scannedQrStr
+          });
+          
+          return bookingIdStr === scannedQrStr || 
+                 qrCodeStr === scannedQrStr ||
+                 bookingIdStr === qrCode.trim();
+        });
+        
         console.log('Found booking by ID/QR:', booking);
         if (booking) {
           bookingData = booking;
         } else {
-          console.log('No booking found with QR code:', trimmedQrCode);
-          console.log('No booking found with ID:', trimmedQrCode);
-          alert(`Invalid QR code. Booking not found.\n\nQR Code: ${trimmedQrCode}\n\nAvailable booking IDs: ${bookings.map(b => b.id).join(', ')}`);
+          console.log('❌ [ERROR] No booking found with QR code:', trimmedQrCode);
+          console.log('❌ [ERROR] Available booking IDs:', bookings.map(b => b.id));
+          console.log('❌ [ERROR] Available QR codes:', bookings.map(b => b.qrCode).filter(Boolean));
+          
+          // Show proper error feedback instead of alert
+          setScanResult(`❌ Booking not found. QR Code: ${trimmedQrCode}`);
+          setTimeout(() => setScanResult(''), 3000);
           return;
         }
       }
@@ -296,12 +313,15 @@ export default function DashboardContent() {
             }, 100);
           }
         } else {
-          alert('Booking not found in the system.');
+          console.log('❌ [ERROR] Booking not found in system after lookup');
+          setScanResult('❌ Booking not found in system');
+          setTimeout(() => setScanResult(''), 3000);
         }
       }
     } catch (error) {
-      console.error('Error processing QR code:', error);
-      alert('Error processing QR code. Please try again.');
+      console.error('❌ [ERROR] Error processing QR code:', error);
+      setScanResult('❌ Error processing QR code. Please try again.');
+      setTimeout(() => setScanResult(''), 3000);
     }
   };
 
