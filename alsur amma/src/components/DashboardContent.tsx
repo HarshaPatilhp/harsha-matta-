@@ -247,15 +247,21 @@ export default function DashboardContent() {
             ? `\n\n📝 Member Entry Tracking:\n${numberOfPeople} members registered. Please mark how many have actually entered.`
             : '';
 
-          alert(`✅ Booking Verified Successfully!\n\n` +
-                `👤 Devotee: ${bookingData.devoteeName || bookingData.fullName}\n` +
-                `🙏 Seva: ${bookingData.sevaName}\n` +
-                `👥 Number of People: ${bookingData.numberOfPeople}\n` +
-                `🍽️ Lunch: ${lunchInfo}\n` +
-                `🕉️ Brahmin Status: ${brahminInfo}\n` +
-                `📅 Date: ${new Date(bookingData.date).toLocaleDateString()}\n` +
-                `🆔 Booking ID: ${bookingData.id}` +
-                memberEntryMessage);
+          // Set modal state to show devotee details
+          setScannedBooking(bookingData);
+          setShowScanResultModal(true);
+          
+          console.log('🔍 [DEBUG] Modal state set:', { 
+            scannedBooking: bookingData, 
+            showModal: true 
+          });
+
+          // Stop QR scanner after successful scan
+          if (qrScannerRef.current) {
+            qrScannerRef.current.stop();
+            setIsScanning(false);
+            console.log('🔍 [DEBUG] QR scanner stopped after successful scan');
+          }
 
           // Add to scan history
           const scanEntry: ScanHistory = {
