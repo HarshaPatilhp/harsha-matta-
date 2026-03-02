@@ -42,13 +42,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Check for stored auth on mount
     const storedUser = localStorage.getItem('temple_auth_user');
-    if (storedUser) {
+    const wasManualRefresh = sessionStorage.getItem('manual_refresh');
+    
+    if (storedUser && !wasManualRefresh) {
       try {
         setUser(JSON.parse(storedUser));
       } catch (error) {
         localStorage.removeItem('temple_auth_user');
       }
+    } else if (wasManualRefresh) {
+      // Clear auth data on manual refresh
+      localStorage.removeItem('temple_auth_user');
+      sessionStorage.removeItem('manual_refresh');
     }
+  }, []);
+
+  // Detect manual page refresh
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem('manual_refresh', 'true');
+    };
+
+    const handleLoad = () => {
+      // Clear the flag after a short delay to distinguish between refresh and navigation
+      setTimeout(() => {
+        sessionStorage.removeItem('manual_refresh');
+      }, 100);
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('load', handleLoad);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('load', handleLoad);
+    };
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -76,6 +104,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('temple_auth_user');
+    // Clear any manual refresh flag
+    sessionStorage.removeItem('manual_refresh');
+    // Redirect to login page
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
   };
 
   const value: AuthContextType = {

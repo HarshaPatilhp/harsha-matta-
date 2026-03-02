@@ -10,12 +10,19 @@ interface Booking {
   id: number;
   sevaName: string;
   devoteeName: string;
+  fullName?: string;
   email: string;
   phone: string;
   date: string;
   time: string;
   status: 'confirmed' | 'pending' | 'completed';
   qrCode: string;
+  numberOfPeople: number;
+  gotra?: string;
+  nakshatra?: string;
+  hall?: string;
+  lunchCount?: number;
+  lunchRequired?: boolean;
 }
 
 interface ScanHistory {
@@ -56,6 +63,8 @@ export default function DashboardContent() {
   const [newVolunteer, setNewVolunteer] = useState({ name: '', email: '', phone: '' });
 
   const [scanHistory, setScanHistory] = useState<ScanHistory[]>([]);
+  const [showScanResultModal, setShowScanResultModal] = useState(false);
+  const [scannedBooking, setScannedBooking] = useState<Booking | null>(null);
 
   useEffect(() => {
     // Initialize EmailJS with your public key
@@ -410,6 +419,171 @@ export default function DashboardContent() {
       localStorage.setItem('temple_volunteers', JSON.stringify(updatedVolunteers));
     }
   };
+
+  const handleScanNextDevotee = () => {
+    setShowScanResultModal(false);
+    setScannedBooking(null);
+    setScanResult('');
+    // Restart scanning
+    startQRScan();
+  };
+
+  const closeScanResultModal = () => {
+    setShowScanResultModal(false);
+    setScannedBooking(null);
+  };
+
+  // QR Scan Result Modal - MUST be first to render
+  if (showScanResultModal && scannedBooking) {
+    const bookingData = scannedBooking;
+    const lunchCount = bookingData.lunchCount || (bookingData.lunchRequired ? bookingData.numberOfPeople : 0);
+    const lunchInfo = lunchCount > 0 ? `${lunchCount} people registered for lunch` : 'No lunch registered';
+    const gotra = bookingData.gotra || '';
+    
+    // Check if Brahmin based on gotra
+    const brahminGotras = [
+      'kashyapa', 'kashyap', 'kashyapa', 'kashyap',
+      'vasishta', 'vashishta', 'vasistha', 'vashistha',
+      'vikramaditya', 'vikramaditya',
+      'bharadwaja', 'bharadwaj', 'bharadwaja', 'bharadwaj',
+      'gautama', 'gautam', 'goutama', 'goutam',
+      'atri', 'atray', 'atri',
+      'vishwamitra', 'vishwamitra',
+      'jamadagni', 'jamadagni',
+      'agastya', 'agastya',
+      'koundina', 'koundinya'
+    ];
+
+    const isBrahmin = gotra && brahminGotras.some(bg =>
+      gotra.toLowerCase().includes(bg.toLowerCase())
+    );
+    const brahminInfo = isBrahmin ? 'Brahmin (eligible for special ceremonies)' : 'Non-Brahmin';
+
+    return (
+      <>
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" onClick={closeScanResultModal}>
+          <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white" onClick={e => e.stopPropagation()}>
+            <div className="mt-3">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  Booking Verified Successfully
+                </h3>
+                <button
+                  onClick={closeScanResultModal}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Devotee Details</h4>
+                    <div className="mt-2 space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Name:</span>
+                        <span className="text-sm font-medium text-gray-900">{bookingData.devoteeName || bookingData.fullName}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Email:</span>
+                        <span className="text-sm font-medium text-gray-900">{bookingData.email}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Phone:</span>
+                        <span className="text-sm font-medium text-gray-900">{bookingData.phone}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Gotra:</span>
+                        <span className="text-sm font-medium text-gray-900">{bookingData.gotra || 'Not specified'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Nakshatra:</span>
+                        <span className="text-sm font-medium text-gray-900">{bookingData.nakshatra || 'Not specified'}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Booking Details</h4>
+                    <div className="mt-2 space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Seva:</span>
+                        <span className="text-sm font-medium text-gray-900">{bookingData.sevaName}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Date:</span>
+                        <span className="text-sm font-medium text-gray-900">{new Date(bookingData.date).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Time:</span>
+                        <span className="text-sm font-medium text-gray-900">{bookingData.time}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">People:</span>
+                        <span className="text-sm font-medium text-gray-900">{bookingData.numberOfPeople}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Hall:</span>
+                        <span className="text-sm font-medium text-gray-900">{bookingData.hall || 'Not specified'}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Lunch Info</h4>
+                      <p className="text-sm text-gray-900 mt-1">{lunchInfo}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Brahmin Status</h4>
+                      <p className="text-sm text-gray-900 mt-1">{brahminInfo}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Booking ID</h4>
+                      <p className="text-sm text-gray-900 mt-1 font-mono">{bookingData.id}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mt-6 pt-4 border-t">
+                <div className="text-sm text-green-600 font-medium">
+                  ✅ Verification completed at {new Date().toLocaleTimeString()}
+                </div>
+                <div className="flex space-x-3">
+                  <button
+                    onClick={closeScanResultModal}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={handleScanNextDevotee}
+                    className="px-6 py-2 text-sm font-medium text-white bg-orange-600 border border-transparent rounded-md hover:bg-orange-700 flex items-center"
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Scan Next Devotee
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   if (!isAuthenticated || !user) {
     return <div className="text-center py-8">Loading...</div>;
