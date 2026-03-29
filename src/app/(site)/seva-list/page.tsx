@@ -55,10 +55,10 @@ export default function SevaList() {
 
       console.log('🔍 [DEBUG] QR Code generated successfully');
 
-      // Call Netlify function instead of EmailJS
-      console.log('🔍 [DEBUG] Sending email via Netlify function...');
+      // Call Next.js API route to send email
+      console.log('🔍 [DEBUG] Sending email via API route...');
       
-      const response = await fetch('/.netlify/functions/send-email', {
+      const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

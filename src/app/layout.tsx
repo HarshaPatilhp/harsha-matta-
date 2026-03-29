@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 const geistSans = Geist({
@@ -50,14 +48,10 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased smooth-scroll`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased smooth-scroll bg-gray-50 dark:bg-slate-900 transition-colors duration-200`}
       >
         <AuthProvider>
-          <Header />
-          <main className="min-h-screen">
-            {children}
-          </main>
-          <Footer />
+          {children}
         </AuthProvider>
       </body>
     </html>
