@@ -54,24 +54,39 @@ export default function ScannerPage() {
     // Stop scanning immediately to prevent duplicate scans
     setIsScanning(false);
     
-    // Dummy check against a hardcoded booking or localStorage
     const stored = localStorage.getItem('temple_bookings');
     let found = false;
     let details = null;
+    let bookings: any[] = [];
 
     if (stored) {
-      const bookings = JSON.parse(stored);
+      bookings = JSON.parse(stored);
       details = bookings.find((b: any) => String(b.id) === String(data));
       found = !!details;
     }
 
-    // Default fallback if localStorage is empty
-    if (!found && data === "1774804335277") {
-      found = true;
-      details = { devoteeName: "Ashutosh Kumar", sevaName: "Heavy Vehicle Pooja" };
-    }
+    if (found && details) {
+      // 1. Update Booking Status
+      const updatedBookings = bookings.map(b => 
+        String(b.id) === String(data) ? { ...b, status: 'completed' } : b
+      );
+      localStorage.setItem('temple_bookings', JSON.stringify(updatedBookings));
 
-    if (found) {
+      // 2. Add to scan history
+      const scanHistoryJson = localStorage.getItem('scanHistory');
+      const scanHistory = scanHistoryJson ? JSON.parse(scanHistoryJson) : [];
+      
+      const newScan = {
+        id: Date.now(),
+        bookingId: details.id,
+        devoteeName: details.devoteeName || details.fullName,
+        sevaName: details.sevaName,
+        scanTime: new Date().toLocaleString(),
+        status: 'Verified'
+      };
+      
+      localStorage.setItem('scanHistory', JSON.stringify([newScan, ...scanHistory]));
+
       setScanResult({ 
         status: 'success', 
         message: 'Devotee Verified!', 
@@ -80,7 +95,7 @@ export default function ScannerPage() {
     } else {
       setScanResult({ 
         status: 'error', 
-        message: 'Invalid QR Code or Booking not found.' 
+        message: 'Invalid QR Code or Booking not found in database.' 
       });
     }
   };

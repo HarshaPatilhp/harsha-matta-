@@ -16,14 +16,23 @@ export default function ActivityLogPage() {
   const [activities, setActivities] = useState<Activity[]>([]);
 
   useEffect(() => {
-    // Dummy Data
-    setActivities([
-      { id: '1', type: 'check_in', title: 'QR Check-in', description: 'Ashutosh Kumar checked in for Heavy Vehicle Pooja.', timestamp: '10:58 AM, Today', user: 'Scanner Terminal 1' },
-      { id: '2', type: 'seva_completed', title: 'Seva Completed', description: 'Panchamrutha Abhisheka batch 2 completed.', timestamp: '10:30 AM, Today', user: 'Admin' },
-      { id: '3', type: 'check_in', title: 'QR Check-in', description: 'Priya Sharma checked in for Rudra Homa.', timestamp: '10:15 AM, Today', user: 'Scanner Terminal 1' },
-      { id: '4', type: 'system_alert', title: 'System Notice', description: 'Mutt opened for devotees.', timestamp: '06:00 AM, Today', user: 'System' },
-      { id: '5', type: 'check_in', title: 'Manual Check-in', description: 'Rahul Varma checked in without QR.', timestamp: '09:20 AM, Yesterday', user: 'Srinivas (Volunteer)' },
-    ]);
+    if (typeof window !== 'undefined') {
+      const historyJson = localStorage.getItem('scanHistory');
+      if (historyJson) {
+        const history = JSON.parse(historyJson);
+        const mapped = history.map((h: any) => ({
+          id: h.id.toString(),
+          type: 'check_in',
+          title: 'QR Check-in Verified',
+          description: `${h.devoteeName || 'A devotee'} checked in for ${h.sevaName || 'Seva'}.`,
+          timestamp: h.scanTime || new Date().toLocaleString('en-US'),
+          user: 'System / Scanner'
+        }));
+        setActivities(mapped);
+      } else {
+        setActivities([]);
+      }
+    }
   }, []);
 
   const getTypeIcon = (type: string) => {

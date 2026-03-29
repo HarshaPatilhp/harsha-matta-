@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Search, Filter, MoreVertical, Edit, Trash2 } from 'lucide-react';
+import { Search, Filter, MoreVertical, CheckCircle, Trash2 } from 'lucide-react';
 
-// Using the same interface as the old DashboardContent to maintain compatibility if real data is hooked up
 interface Booking {
   id: number;
   devoteeName: string;
@@ -17,23 +16,19 @@ export default function DevoteesPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    // Load from local storage or populate dummy data if empty
+  const loadBookings = () => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('temple_bookings');
       if (stored && stored !== '[]') {
         setBookings(JSON.parse(stored));
       } else {
-        // Dummy data for design
-        setBookings([
-          { id: 1774804335277, devoteeName: 'Ashutosh Kumar', sevaName: 'Heavy Vehicle Pooja', phone: '9876543210', date: '2023-10-10', status: 'completed' },
-          { id: 1774804335278, devoteeName: 'Srinivas Rao', sevaName: 'Navagraha Shanti', phone: '9876543211', date: '2023-10-10', status: 'confirmed' },
-          { id: 1774804335279, devoteeName: 'Priya Sharma', sevaName: 'Rudra Homa', phone: '9876543212', date: '2023-10-10', status: 'pending' },
-          { id: 1774804335280, devoteeName: 'Lakshmi N', sevaName: 'Sathyanarayana Pooja', phone: '9876543213', date: '2023-10-11', status: 'confirmed' },
-          { id: 1774804335281, devoteeName: 'Rahul Varma', sevaName: 'Panchamrutha Abhisheka', phone: '9876543214', date: '2023-10-11', status: 'completed' },
-        ]);
+        setBookings([]);
       }
     }
+  };
+
+  useEffect(() => {
+    loadBookings();
   }, []);
 
   const getStatusColor = (status: string) => {
@@ -44,6 +39,22 @@ export default function DevoteesPage() {
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400';
     }
   };
+
+  const deleteBooking = (id: number) => {
+    if(confirm('Are you sure you want to delete this booking?')) {
+      const updated = bookings.filter(b => b.id !== id);
+      setBookings(updated);
+      localStorage.setItem('temple_bookings', JSON.stringify(updated));
+    }
+  }
+
+  const markCompleted = (id: number) => {
+    if(confirm('Mark this seva booking as completed?')) {
+      const updated = bookings.map(b => b.id === id ? { ...b, status: 'completed' } : b);
+      setBookings(updated);
+      localStorage.setItem('temple_bookings', JSON.stringify(updated));
+    }
+  }
 
   const filteredBookings = bookings.filter(b => 
     b.devoteeName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -58,9 +69,6 @@ export default function DevoteesPage() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Devotee Management</h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">View and manage all registered devotees and their sevas.</p>
         </div>
-        <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors">
-          + Add New Devotee
-        </button>
       </div>
 
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700/50 overflow-hidden">
@@ -100,7 +108,7 @@ export default function DevoteesPage() {
                 filteredBookings.map((booking) => (
                   <tr key={booking.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-500 dark:text-gray-400">
-                      #{String(booking.id).slice(-6)}
+                      #{String(booking.id).slice(-8)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
@@ -108,8 +116,8 @@ export default function DevoteesPage() {
                           {booking.devoteeName?.charAt(0) || 'U'}
                         </div>
                         <div>
-                          <p className="font-semibold text-gray-900 dark:text-white leading-tight">{booking.devoteeName}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{booking.phone}</p>
+                          <p className="font-semibold text-gray-900 dark:text-white leading-tight">{booking.devoteeName || 'Unknown Devotee'}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{booking.phone || 'No phone'}</p>
                         </div>
                       </div>
                     </td>
@@ -125,13 +133,15 @@ export default function DevoteesPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                      <button className="p-1.5 text-gray-400 hover:text-emerald-600 transition-colors ml-2" title="Edit">
-                        <Edit size={16} />
-                      </button>
-                      <button className="p-1.5 text-gray-400 hover:text-red-600 transition-colors ml-2" title="Delete">
+                      {booking.status !== 'completed' && (
+                        <button onClick={() => markCompleted(booking.id)} className="p-1.5 text-gray-400 hover:text-emerald-600 transition-colors ml-2" title="Mark Completed">
+                          <CheckCircle size={16} />
+                        </button>
+                      )}
+                      <button onClick={() => deleteBooking(booking.id)} className="p-1.5 text-gray-400 hover:text-red-600 transition-colors ml-2" title="Delete">
                         <Trash2 size={16} />
                       </button>
-                      <button className="p-1.5 text-gray-400 hover:text-gray-900 transition-colors ml-2">
+                      <button className="p-1.5 text-gray-400 hover:text-gray-900 transition-colors ml-2" title="More">
                         <MoreVertical size={16} />
                       </button>
                     </td>
@@ -143,7 +153,7 @@ export default function DevoteesPage() {
                     <div className="flex flex-col items-center justify-center">
                       <Search className="h-10 w-10 text-gray-300 mb-3" />
                       <p className="text-lg font-medium">No devotees found</p>
-                      <p className="text-sm">Try adjusting your search or filters.</p>
+                      <p className="text-sm">Try adjusting your search or there are no bookings yet.</p>
                     </div>
                   </td>
                 </tr>
@@ -152,7 +162,7 @@ export default function DevoteesPage() {
           </table>
         </div>
         
-        {/* Pagination Dummy */}
+        {/* Pagination Status */}
         <div className="px-6 py-4 border-t border-gray-100 dark:border-slate-700/50 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 bg-gray-50/50 dark:bg-slate-800/30">
           <span>Showing 1 to {Math.min(filteredBookings.length, 10)} of {filteredBookings.length} entries</span>
           <div className="flex gap-2">
