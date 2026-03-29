@@ -21,9 +21,9 @@ export default function ScannerPage() {
       if (!qrScannerRef.current) {
         qrScannerRef.current = new QrScanner(
           videoRef.current,
-          (result) => {
+          (result: any) => {
             const data = result?.data || result;
-            handleScanSuccess(data);
+            handleScanSuccess(String(data));
           },
           { returnDetailedScanResult: true }
         );

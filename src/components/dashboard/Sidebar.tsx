@@ -26,7 +26,9 @@ export default function Sidebar({ isOpen, setIsOpen, userRole }: SidebarProps) {
   const pathname = usePathname();
   const isAdmin = userRole === 'admin';
 
-  const volunteerLinks = [
+  type NavLink = { name: string; href: string; icon: any; highlight?: boolean; };
+
+  const volunteerLinks: NavLink[] = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Seva Dashboard', href: '/dashboard/sevas', icon: Calendar },
     { name: 'QR Check-in', href: '/dashboard/scanner', icon: QrCode, highlight: true },
@@ -34,7 +36,7 @@ export default function Sidebar({ isOpen, setIsOpen, userRole }: SidebarProps) {
     { name: 'Activity Log', href: '/dashboard/activity', icon: Clock },
   ];
 
-  const adminAdditions = [
+  const adminAdditions: NavLink[] = [
     { name: 'Donations', href: '/dashboard/donations', icon: Gift },
     { name: 'Annadanam', href: '/dashboard/annadanam', icon: Coffee },
     { name: 'Reports', href: '/dashboard/reports', icon: PieChart },
