@@ -26,22 +26,26 @@ export default function DashboardPage() {
         const history = historyJson ? JSON.parse(historyJson) : [];
 
         // Calculate live stats
-        const todayStr = new Date().toISOString().split('T')[0];
+        // Fix timezone date string matching (local time YYYY-MM-DD instead of UTC)
+        const today = new Date();
+        const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+        
         const todaysBookings = bookings.filter((b: any) => b.date && b.date.startsWith(todayStr));
         
-        // 1. Total Devotees Today
+        // 1. Total Devotees (All Time)
+        const totalDevotees = bookings.reduce((sum: number, b: any) => sum + (Number(b.numberOfPeople) || 1), 0);
         const devoteesToday = todaysBookings.reduce((sum: number, b: any) => sum + (Number(b.numberOfPeople) || 1), 0);
         
-        // 2. Sevas Completed Today
-        const completedToday = todaysBookings.filter((b: any) => b.status === 'completed').length;
+        // 2. Sevas Completed (All Time)
+        const completedTotal = bookings.filter((b: any) => b.status === 'completed').length;
         
-        // 3. Donation Count (Sum of totalCost)
-        const revenueToday = todaysBookings.reduce((sum: number, b: any) => sum + (Number(b.totalCost) || 0), 0);
+        // 3. Total Revenue (All Time)
+        const revenueTotal = bookings.reduce((sum: number, b: any) => sum + (Number(b.totalCost) || 0), 0);
 
         setStats([
-          { title: 'Total Devotees Today', value: devoteesToday.toString(), Icon: Users, subtitle: 'Active footfall' },
-          { title: 'Sevas Completed', value: completedToday.toString(), Icon: BookOpen, subtitle: `Of ${todaysBookings.length} booked today` },
-          { title: 'Today\'s Revenue', value: `₹${revenueToday}`, Icon: Gift, subtitle: 'Total collected' },
+          { title: 'Total Devotees', value: totalDevotees.toString(), Icon: Users, subtitle: `${devoteesToday} arriving today` },
+          { title: 'Sevas Completed', value: completedTotal.toString(), Icon: BookOpen, subtitle: `Of ${bookings.length} total booked` },
+          { title: 'Total Revenue', value: `₹${revenueTotal.toLocaleString('en-IN')}`, Icon: Gift, subtitle: 'Total collected' },
           { title: 'Mutt Status', value: 'Open', Icon: ShieldCheck, subtitle: 'Closes at 9:00 PM' },
         ]);
 
