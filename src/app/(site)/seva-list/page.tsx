@@ -587,9 +587,9 @@ export default function SevaList() {
           console.log('🔍 [DEBUG] Email failed, showing fallback message');
           alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Email sending failed, but booking is saved.`);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error sending email:', error);
-        alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Email sending failed, but booking is saved.`);
+        alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Email sending failed (Reason: ${error.message || 'Unknown server error'}). Please check Netlify Environment Variables.`);
       }
     } catch (error) {
       console.error('Error in booking submission:', error);
