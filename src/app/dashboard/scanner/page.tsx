@@ -66,6 +66,14 @@ export default function ScannerPage() {
     }
 
     if (found && details) {
+      if (details.status === 'completed') {
+        setScanResult({ 
+          status: 'error', 
+          message: 'Oops! Sorry, this QR code has already been claimed.' 
+        });
+        return;
+      }
+
       // 1. Update Booking Status
       const updatedBookings = bookings.map(b => 
         String(b.id) === String(data) ? { ...b, status: 'completed' } : b
