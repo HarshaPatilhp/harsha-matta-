@@ -56,11 +56,23 @@ export default function DevoteesPage() {
     }
   }
 
-  const filteredBookings = bookings.filter(b => 
-    b.devoteeName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    b.sevaName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    b.id.toString().includes(searchTerm)
-  );
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed'>('all');
+  const [showStatusMenu, setShowStatusMenu] = useState(false);
+
+  const filteredBookings = bookings.filter(b => {
+    const name = b.devoteeName || (b as any).fullName || '';
+    const seva = b.sevaName || '';
+    const id = b.id ? String(b.id) : '';
+    const term = searchTerm.toLowerCase();
+    
+    const matchesSearch = name.toLowerCase().includes(term) ||
+                          seva.toLowerCase().includes(term) ||
+                          id.includes(term);
+
+    const matchesStatus = statusFilter === 'all' || (b.status || '').toLowerCase() === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div className="space-y-6 animate-fade-in pb-12">
@@ -84,14 +96,36 @@ export default function DevoteesPage() {
               className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white dark:bg-slate-900 shadow-sm"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 shadow-sm hover:bg-gray-50 dark:hover:bg-slate-800 font-medium text-gray-700 dark:text-gray-300">
-            <Filter size={18} />
-            Filter Status
-          </button>
+          <div className="relative">
+            <button 
+              onClick={() => setShowStatusMenu(!showStatusMenu)}
+              className="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 shadow-sm hover:bg-gray-50 dark:hover:bg-slate-800 font-medium text-gray-700 dark:text-gray-300"
+            >
+              <Filter size={18} />
+              {statusFilter === 'all' ? 'All Statuses' : statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
+            </button>
+            
+            {showStatusMenu && (
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700 z-10 py-1">
+                {['all', 'pending', 'confirmed', 'completed'].map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => {
+                      setStatusFilter(status as any);
+                      setShowStatusMenu(false);
+                    }}
+                    className={`block w-full text-left px-4 py-2 text-sm ${statusFilter === status ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                  >
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Desktop Table View */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto min-h-[300px]">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 dark:bg-slate-800/80 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold border-b border-gray-100 dark:border-slate-700/50">
@@ -113,10 +147,10 @@ export default function DevoteesPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/40 flex items-center justify-center font-bold text-orange-700 dark:text-orange-400">
-                          {booking.devoteeName?.charAt(0) || 'U'}
+                          {((booking as any).fullName || booking.devoteeName)?.charAt(0) || 'U'}
                         </div>
                         <div>
-                          <p className="font-semibold text-gray-900 dark:text-white leading-tight">{booking.devoteeName || 'Unknown Devotee'}</p>
+                          <p className="font-semibold text-gray-900 dark:text-white leading-tight">{(booking as any).fullName || booking.devoteeName || 'Unknown Devotee'}</p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">{booking.phone || 'No phone'}</p>
                         </div>
                       </div>
@@ -128,8 +162,8 @@ export default function DevoteesPage() {
                       {booking.date}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wider ${getStatusColor(booking.status)}`}>
-                        {booking.status}
+                      <span className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wider ${getStatusColor(booking.status || 'pending')}`}>
+                        {booking.status || 'pending'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
@@ -141,9 +175,6 @@ export default function DevoteesPage() {
                       <button onClick={() => deleteBooking(booking.id)} className="p-1.5 text-gray-400 hover:text-red-600 transition-colors ml-2" title="Delete">
                         <Trash2 size={16} />
                       </button>
-                      <button className="p-1.5 text-gray-400 hover:text-gray-900 transition-colors ml-2" title="More">
-                        <MoreVertical size={16} />
-                      </button>
                     </td>
                   </tr>
                 ))
@@ -153,7 +184,7 @@ export default function DevoteesPage() {
                     <div className="flex flex-col items-center justify-center">
                       <Search className="h-10 w-10 text-gray-300 mb-3" />
                       <p className="text-lg font-medium">No devotees found</p>
-                      <p className="text-sm">Try adjusting your search or there are no bookings yet.</p>
+                      <p className="text-sm">Try adjusting your search or filters.</p>
                     </div>
                   </td>
                 </tr>

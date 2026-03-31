@@ -186,35 +186,37 @@ export default function ScannerPage() {
           )}
 
           {scanResult.status === 'success' && (
-             <div className="absolute inset-0 bg-orange-900/90 flex flex-col items-center justify-center p-6 text-center z-20 backdrop-blur-sm animate-fade-in">
-                <div className="w-24 h-24 bg-orange-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(16,185,129,0.5)]">
-                  <CheckCircle size={48} className="text-white" />
-                </div>
-                <h2 className="text-3xl font-bold text-white mb-2">{scanResult.message}</h2>
-                <div className="bg-white/10 p-6 rounded-2xl mt-4 max-w-sm w-full backdrop-blur-md border border-white/20">
-                  <p className="text-orange-200 text-sm uppercase tracking-wider mb-1 font-semibold">Devotee</p>
-                  <p className="text-white text-2xl font-bold mb-4">{scanResult.data?.devoteeName || 'Unknown'}</p>
-                  <p className="text-orange-200 text-sm uppercase tracking-wider mb-1 font-semibold">Seva Type</p>
-                  <p className="text-white text-xl">{scanResult.data?.sevaName || 'Standard Entry'}</p>
-                  
-                  <div className="grid grid-cols-2 gap-4 mt-4 text-left">
-                    <div>
-                      <p className="text-orange-200 text-xs uppercase tracking-wider mb-1 font-semibold">Category</p>
-                      <p className="text-white font-medium">{scanResult.data?.devoteeCategory}</p>
-                      <p className="text-orange-100/70 text-xs mt-0.5">({scanResult.data?.gotra || 'No Gotra'})</p>
-                    </div>
-                    <div>
-                      <p className="text-orange-200 text-xs uppercase tracking-wider mb-1 font-semibold">Redirect To</p>
-                      <p className="text-yellow-300 font-bold leading-tight">📍 {scanResult.data?.redirectHall}</p>
+             <div className="absolute inset-0 bg-emerald-900/90 z-20 backdrop-blur-sm animate-fade-in overflow-y-auto">
+               <div className="flex flex-col items-center justify-center min-h-full p-4 sm:p-6 text-center">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-[0_0_40px_rgba(16,185,129,0.5)] shrink-0">
+                    <CheckCircle size={40} className="text-white" />
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 shrink-0">{scanResult.message}</h2>
+                  <div className="bg-white/10 p-4 sm:p-6 rounded-2xl mt-2 max-w-sm w-full backdrop-blur-md border border-white/20 shrink-0">
+                    <p className="text-emerald-200 text-xs sm:text-sm uppercase tracking-wider mb-1 font-semibold">Devotee</p>
+                    <p className="text-white text-xl sm:text-2xl font-bold mb-3">{scanResult.data?.devoteeName || 'Unknown'}</p>
+                    <p className="text-emerald-200 text-xs sm:text-sm uppercase tracking-wider mb-1 font-semibold">Seva Type</p>
+                    <p className="text-white text-lg sm:text-xl leading-tight">{scanResult.data?.sevaName || 'Standard Entry'}</p>
+                    
+                    <div className="grid grid-cols-2 gap-3 mt-4 text-left">
+                      <div>
+                        <p className="text-emerald-200 text-[10px] sm:text-xs uppercase tracking-wider mb-1 font-semibold">Category</p>
+                        <p className="text-white font-medium text-sm sm:text-base">{scanResult.data?.devoteeCategory}</p>
+                        <p className="text-emerald-100/70 text-[10px] sm:text-xs mt-0.5">({scanResult.data?.gotra || 'No Gotra'})</p>
+                      </div>
+                      <div>
+                        <p className="text-emerald-200 text-[10px] sm:text-xs uppercase tracking-wider mb-1 font-semibold">Redirect To</p>
+                        <p className="text-yellow-300 font-bold leading-tight text-sm sm:text-base">📍 {scanResult.data?.redirectHall}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <button 
-                  onClick={startScan}
-                  className="mt-8 bg-white text-orange-900 hover:bg-orange-50 px-8 py-3 rounded-full font-bold transition-all shadow-lg"
-                >
-                  Scan Next Devotee
-                </button>
+                  <button 
+                    onClick={startScan}
+                    className="mt-6 bg-white text-emerald-900 hover:bg-emerald-50 px-6 py-2.5 sm:px-8 sm:py-3 rounded-full font-bold transition-all shadow-lg shrink-0"
+                  >
+                    Scan Next Devotee
+                  </button>
+               </div>
              </div>
           )}
 

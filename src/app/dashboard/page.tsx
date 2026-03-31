@@ -42,12 +42,18 @@ export default function DashboardPage() {
         // 3. Total Revenue (All Time)
         const revenueTotal = bookings.reduce((sum: number, b: any) => sum + (Number(b.totalCost) || 0), 0);
 
-        setStats([
+        const baseStats = [
           { title: 'Total Devotees', value: totalDevotees.toString(), Icon: Users, subtitle: `${devoteesToday} arriving today` },
           { title: 'Sevas Completed', value: completedTotal.toString(), Icon: BookOpen, subtitle: `Of ${bookings.length} total booked` },
-          { title: 'Total Revenue', value: `₹${revenueTotal.toLocaleString('en-IN')}`, Icon: Gift, subtitle: 'Total collected' },
-          { title: 'Mutt Status', value: 'Open', Icon: ShieldCheck, subtitle: 'Closes at 9:00 PM' },
-        ]);
+        ];
+
+        if (user?.role === 'admin') {
+          baseStats.push({ title: 'Total Revenue', value: `₹${revenueTotal.toLocaleString('en-IN')}`, Icon: Gift, subtitle: 'Total collected' });
+        }
+
+        baseStats.push({ title: 'Mutt Status', value: 'Open', Icon: ShieldCheck, subtitle: 'Closes at 9:00 PM' });
+        
+        setStats(baseStats);
 
         // Load recent check-ins from history
         const recent = history.slice(0, 5).map((h: any) => ({
@@ -72,7 +78,7 @@ export default function DashboardPage() {
     // Auto refresh every 30 seconds
     const interval = setInterval(loadData, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [user?.role]);
 
   const quickActions = [
     { title: 'QR Scanner', href: '/dashboard/scanner', description: 'Scan participant QR codes', icon: QrCode, live: true, color: 'text-orange-600', bg: 'bg-orange-100' },

@@ -40,43 +40,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Check for stored auth on mount
-    const storedUser = localStorage.getItem('temple_auth_user');
-    const wasManualRefresh = sessionStorage.getItem('manual_refresh');
+    // Check for stored auth in session storage on mount
+    const storedUser = sessionStorage.getItem('temple_auth_user');
     
-    if (storedUser && !wasManualRefresh) {
+    if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
       } catch (error) {
-        localStorage.removeItem('temple_auth_user');
+        sessionStorage.removeItem('temple_auth_user');
       }
-    } else if (wasManualRefresh) {
-      // Clear auth data on manual refresh
-      localStorage.removeItem('temple_auth_user');
-      sessionStorage.removeItem('manual_refresh');
     }
-  }, []);
-
-  // Detect manual page refresh
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      sessionStorage.setItem('manual_refresh', 'true');
-    };
-
-    const handleLoad = () => {
-      // Clear the flag after a short delay to distinguish between refresh and navigation
-      setTimeout(() => {
-        sessionStorage.removeItem('manual_refresh');
-      }, 100);
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('load', handleLoad);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('load', handleLoad);
-    };
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -94,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
 
       setUser(userData);
-      localStorage.setItem('temple_auth_user', JSON.stringify(userData));
+      sessionStorage.setItem('temple_auth_user', JSON.stringify(userData));
       return true;
     }
 
@@ -103,9 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('temple_auth_user');
-    // Clear any manual refresh flag
-    sessionStorage.removeItem('manual_refresh');
+    sessionStorage.removeItem('temple_auth_user');
     // Redirect to login page
     if (typeof window !== 'undefined') {
       window.location.href = '/login';

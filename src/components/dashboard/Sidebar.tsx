@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 import { 
   LayoutDashboard, 
   QrCode, 
@@ -24,6 +25,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, setIsOpen, userRole }: SidebarProps) {
   const pathname = usePathname();
+  const { logout } = useAuth();
   const isAdmin = userRole === 'admin';
 
   type NavLink = { name: string; href: string; icon: any; highlight?: boolean; };
@@ -109,7 +111,10 @@ export default function Sidebar({ isOpen, setIsOpen, userRole }: SidebarProps) {
         </nav>
 
         <div className="p-4 border-t border-orange-800/50 mt-auto">
-          <button className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-orange-200 hover:bg-red-500/20 hover:text-red-400 transition-colors">
+          <button 
+            onClick={logout}
+            className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-orange-200 hover:bg-red-500/20 hover:text-red-400 transition-colors"
+          >
             <LogOut size={20} />
             <span className="font-medium">Logout</span>
           </button>
