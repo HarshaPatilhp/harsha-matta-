@@ -51,6 +51,20 @@ export default function SevaList() {
       
       emailjs.init(PUBLIC_KEY);
 
+      // Generate dynamic QR URL for EmailJS standard templates
+      const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${bookingData.id.toString()}`;
+
+      const bookingDetailsText = `
+Seva: ${bookingData.sevaName}
+Date: ${bookingData.date}
+Time: ${bookingData.time || 'As scheduled'}
+Number of People: ${bookingData.numberOfPeople || 1}
+Gotra: ${bookingData.gotra || 'N/A'}
+Nakshatra: ${bookingData.nakshatra || 'N/A'}
+Tirtha Prasada: ${bookingData.lunchRequired ? `Yes (${bookingData.lunchCount} people)` : 'No'}
+Total Cost: ${bookingData.totalCost}
+      `.trim();
+
       const templateParams = {
         to_email: bookingData.email,
         devotee_name: bookingData.devoteeName || bookingData.fullName || 'Devotee',
@@ -60,7 +74,9 @@ export default function SevaList() {
         time: bookingData.time || 'As scheduled',
         number_of_people: bookingData.numberOfPeople || 1,
         total_cost: bookingData.totalCost || 'Paid at temple',
-        qr_data: bookingData.id.toString() 
+        qr_data: bookingData.id.toString(),
+        qr_image_url: qrImageUrl,
+        booking_details: bookingDetailsText,
       };
 
       console.log('🔍 [DEBUG] Sending email via EmailJS with params:', templateParams);
