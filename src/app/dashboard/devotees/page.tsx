@@ -33,7 +33,7 @@ export default function DevoteesPage() {
 
   const getStatusColor = (status: string) => {
     switch(status.toLowerCase()) {
-      case 'completed': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400';
+      case 'completed': return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400';
       case 'confirmed': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
       case 'pending': return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400';
@@ -81,7 +81,7 @@ export default function DevoteesPage() {
               placeholder="Search by name, ID, or seva..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-slate-900 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white dark:bg-slate-900 shadow-sm"
             />
           </div>
           <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 shadow-sm hover:bg-gray-50 dark:hover:bg-slate-800 font-medium text-gray-700 dark:text-gray-300">
@@ -112,7 +112,7 @@ export default function DevoteesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center font-bold text-emerald-700 dark:text-emerald-400">
+                        <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/40 flex items-center justify-center font-bold text-orange-700 dark:text-orange-400">
                           {booking.devoteeName?.charAt(0) || 'U'}
                         </div>
                         <div>
@@ -134,7 +134,7 @@ export default function DevoteesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                       {booking.status !== 'completed' && (
-                        <button onClick={() => markCompleted(booking.id)} className="p-1.5 text-gray-400 hover:text-emerald-600 transition-colors ml-2" title="Mark Completed">
+                        <button onClick={() => markCompleted(booking.id)} className="p-1.5 text-gray-400 hover:text-orange-600 transition-colors ml-2" title="Mark Completed">
                           <CheckCircle size={16} />
                         </button>
                       )}
@@ -167,7 +167,7 @@ export default function DevoteesPage() {
           <span>Showing 1 to {Math.min(filteredBookings.length, 10)} of {filteredBookings.length} entries</span>
           <div className="flex gap-2">
             <button className="px-3 py-1 border border-gray-200 dark:border-slate-700 rounded bg-white dark:bg-slate-800 disabled:opacity-50" disabled>Prev</button>
-            <button className="px-3 py-1 border border-gray-200 dark:border-slate-700 rounded bg-emerald-600 text-white">1</button>
+            <button className="px-3 py-1 border border-gray-200 dark:border-slate-700 rounded bg-orange-600 text-white">1</button>
             <button className="px-3 py-1 border border-gray-200 dark:border-slate-700 rounded bg-white dark:bg-slate-800 disabled:opacity-50" disabled>Next</button>
           </div>
         </div>

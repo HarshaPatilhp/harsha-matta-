@@ -42,12 +42,12 @@ export default function AnnadanamPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-             <Utensils className="text-emerald-500" />
+             <Utensils className="text-orange-500" />
              Annadanam Sponsoring
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Manage and view the daily food sponsorship records.</p>
         </div>
-        <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors text-sm">
+        <button className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors text-sm">
           + Schedule Sponsor
         </button>
       </div>
@@ -61,7 +61,7 @@ export default function AnnadanamPage() {
               placeholder="Search sponsors by name or meal type..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-gray-50 dark:bg-slate-900 text-sm"
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-gray-50 dark:bg-slate-900 text-sm"
             />
           </div>
         </div>
@@ -71,7 +71,7 @@ export default function AnnadanamPage() {
              filtered.map((sponsor) => (
                 <div key={sponsor.id} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-5 hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer">
                    <div className="flex justify-between items-start mb-4">
-                      <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 flex items-center justify-center font-bold text-xl">
+                      <div className="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/40 text-orange-600 flex items-center justify-center font-bold text-xl">
                         {sponsor.sponsorName.charAt(0)}
                       </div>
                       <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-3 py-1 rounded-full">
@@ -85,7 +85,7 @@ export default function AnnadanamPage() {
                    
                    <div className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-700 flex justify-between items-center">
                      <span className="text-sm font-medium text-gray-500">Donation Amt:</span>
-                     <span className="text-lg font-extrabold text-emerald-600 dark:text-emerald-400">₹{sponsor.amount.toLocaleString('en-IN')}</span>
+                     <span className="text-lg font-extrabold text-orange-600 dark:text-orange-400">₹{sponsor.amount.toLocaleString('en-IN')}</span>
                    </div>
                 </div>
              ))

@@ -75,7 +75,7 @@ export default function DashboardPage() {
   }, []);
 
   const quickActions = [
-    { title: 'QR Scanner', href: '/dashboard/scanner', description: 'Scan participant QR codes', icon: QrCode, live: true, color: 'text-emerald-600', bg: 'bg-emerald-100' },
+    { title: 'QR Scanner', href: '/dashboard/scanner', description: 'Scan participant QR codes', icon: QrCode, live: true, color: 'text-orange-600', bg: 'bg-orange-100' },
     { title: 'Devotees List', href: '/dashboard/devotees', description: 'View and manage participants', icon: Users, live: false, color: 'text-amber-500', bg: 'bg-amber-100' },
     { title: 'Activity Log', href: '/dashboard/activity', description: 'View event activity history', icon: Clock, live: false, color: 'text-red-500', bg: 'bg-red-100' },
   ];
@@ -88,7 +88,7 @@ export default function DashboardPage() {
           <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
             Vidyaranyapura Mutt Panel
           </h1>
-          <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400 mt-1 uppercase tracking-wider flex items-center gap-2">
+          <p className="text-sm font-medium text-orange-600 dark:text-orange-400 mt-1 uppercase tracking-wider flex items-center gap-2">
             <span>Role: <span className="text-gray-500 dark:text-gray-400">{user?.role || 'Volunteer'}</span></span>
             <span className="text-gray-300 dark:text-gray-600">•</span>
             <span className="text-gray-500 dark:text-gray-400">{new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
@@ -98,7 +98,7 @@ export default function DashboardPage() {
         <button 
           onClick={loadData}
           disabled={isRefreshing}
-          className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 px-5 py-2.5 rounded-full font-semibold transition-all shadow-sm disabled:opacity-50"
+          className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-orange-200 dark:border-orange-900/50 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/30 px-5 py-2.5 rounded-full font-semibold transition-all shadow-sm disabled:opacity-50"
         >
           <RefreshCw size={18} className={isRefreshing ? 'animate-spin' : ''} />
           <span>{isRefreshing ? 'Refreshing...' : `Refresh Data (Last: ${lastRefreshed})`}</span>
@@ -163,7 +163,7 @@ export default function DashboardPage() {
             {recentCheckins.length > 0 ? recentCheckins.map((checkin) => (
               <div key={checkin.id} className="p-5 hover:bg-gray-50/80 dark:hover:bg-slate-800/80 transition-colors flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-200 dark:border-emerald-800/50">
+                  <div className="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 font-bold border border-orange-200 dark:border-orange-800/50">
                     {checkin.name.charAt(0)}
                   </div>
                   <div>
@@ -177,7 +177,7 @@ export default function DashboardPage() {
                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
                     checkin.status === 'Completed' || checkin.status === 'Verified'
                       ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' 
-                      : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+                      : 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
                   }`}>
                     {checkin.status}
                   </span>
@@ -190,7 +190,7 @@ export default function DashboardPage() {
             )}
           </div>
           <div className="bg-gray-50 dark:bg-slate-800/50 p-4 border-t border-gray-100 dark:border-slate-700/50 text-center">
-            <Link href="/dashboard/activity" className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-amber-500 dark:hover:text-amber-400 uppercase tracking-widest transition-colors">
+            <Link href="/dashboard/activity" className="text-sm font-semibold text-orange-600 dark:text-orange-400 hover:text-amber-500 dark:hover:text-amber-400 uppercase tracking-widest transition-colors">
               View All Activity →
             </Link>
           </div>

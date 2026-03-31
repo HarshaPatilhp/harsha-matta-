@@ -37,7 +37,7 @@ export default function ActivityLogPage() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'check_in': return <Clock className="h-5 w-5 text-emerald-600" />;
+      case 'check_in': return <Clock className="h-5 w-5 text-orange-600" />;
       case 'seva_completed': return <CheckCircle className="h-5 w-5 text-amber-500" />;
       default: return <Calendar className="h-5 w-5 text-blue-500" />;
     }
@@ -45,7 +45,7 @@ export default function ActivityLogPage() {
 
   const getTypeStyle = (type: string) => {
     switch (type) {
-      case 'check_in': return 'bg-emerald-100 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800/50';
+      case 'check_in': return 'bg-orange-100 dark:bg-orange-900/30 border-orange-200 dark:border-orange-800/50';
       case 'seva_completed': return 'bg-amber-100 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800/50';
       default: return 'bg-blue-100 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800/50';
     }
@@ -62,7 +62,7 @@ export default function ActivityLogPage() {
            <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 shadow-sm hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors text-sm font-medium">
              <Filter size={16} /> Filter
            </button>
-           <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors">
+           <button className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors">
              Export CSV
            </button>
         </div>
@@ -102,7 +102,7 @@ export default function ActivityLogPage() {
         </div>
         
         <div className="p-4 border-t border-gray-100 dark:border-slate-700/50 text-center bg-gray-50/50 dark:bg-slate-800/30">
-          <button className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors uppercase tracking-widest">
+          <button className="text-sm font-semibold text-orange-600 hover:text-orange-700 transition-colors uppercase tracking-widest">
             Load Older Activity ↓
           </button>
         </div>

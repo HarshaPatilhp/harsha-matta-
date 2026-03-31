@@ -49,19 +49,19 @@ export default function DonationsPage() {
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Track financial contributions and issue receipts.</p>
         </div>
         <div className="flex gap-2">
-          <button className="flex items-center gap-2 px-4 py-2 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-800/40 transition-colors font-medium text-sm">
+          <button className="flex items-center gap-2 px-4 py-2 border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-800/40 transition-colors font-medium text-sm">
             <FileDown size={18} /> Export
           </button>
-          <button className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors text-sm">
+          <button className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors text-sm">
             <Plus size={18} /> Add Record
           </button>
         </div>
       </div>
 
       {/* Overview Stat */}
-      <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-6 text-white shadow-lg flex items-center justify-between">
+      <div className="bg-gradient-to-r from-orange-600 to-teal-600 rounded-2xl p-6 text-white shadow-lg flex items-center justify-between">
          <div>
-            <p className="text-emerald-100 font-medium tracking-wide uppercase text-sm mb-1">Total Contributions Generated</p>
+            <p className="text-orange-100 font-medium tracking-wide uppercase text-sm mb-1">Total Contributions Generated</p>
             <h2 className="text-4xl font-extrabold flex items-baseline gap-1">
               <span className="text-2xl opacity-80">₹</span> {totalAmount.toLocaleString('en-IN')}
             </h2>
@@ -81,7 +81,7 @@ export default function DonationsPage() {
               placeholder="Search donor, ID, or purpose..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-slate-900 shadow-sm text-sm"
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white dark:bg-slate-900 shadow-sm text-sm"
             />
           </div>
           <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 shadow-sm hover:bg-gray-50 dark:hover:bg-slate-800 font-medium text-gray-700 dark:text-gray-300 text-sm">
@@ -117,12 +117,12 @@ export default function DonationsPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
                       {donation.date}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-emerald-400 text-right">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-orange-400 text-right">
                       {donation.amount.toLocaleString('en-IN')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
                       {donation.receiptSent ? (
-                        <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-400 px-2 py-1 rounded text-xs font-semibold">Sent</span>
+                        <span className="bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-400 px-2 py-1 rounded text-xs font-semibold">Sent</span>
                       ) : (
                         <button className="text-blue-600 dark:text-blue-400 hover:underline font-medium text-xs">Send Receipt</button>
                       )}

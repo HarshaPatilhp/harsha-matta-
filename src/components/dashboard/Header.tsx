@@ -35,7 +35,7 @@ export default function Header({ toggleSidebar, user }: HeaderProps) {
         <div className="flex items-center gap-4">
           <button
             type="button"
-            className="md:hidden p-2 -ml-2 text-gray-400 hover:text-gray-500 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="md:hidden p-2 -ml-2 text-gray-400 hover:text-gray-500 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
             onClick={toggleSidebar}
           >
             <span className="sr-only">Open sidebar</span>
@@ -46,11 +46,11 @@ export default function Header({ toggleSidebar, user }: HeaderProps) {
           <div className="hidden lg:flex max-w-md w-full ml-4">
             <div className="relative w-64 focus-within:w-80 transition-all duration-300">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+                <Search className="h-4 w-4 text-orange-400" aria-hidden="true" />
               </div>
               <input
                 id="search"
-                className="block w-full pl-10 pr-3 py-2 border border-gray-200 dark:border-slate-700 rounded-full leading-5 bg-gray-50 dark:bg-slate-800 placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent sm:text-sm shadow-inner transition-colors"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-200 dark:border-slate-700 rounded-full leading-5 bg-gray-50 dark:bg-slate-800 placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent sm:text-sm shadow-inner transition-colors"
                 placeholder="Search devotees, bookings..."
                 type="search"
               />
@@ -61,12 +61,12 @@ export default function Header({ toggleSidebar, user }: HeaderProps) {
         <div className="flex items-center gap-4 sm:gap-6 ml-auto">
           {/* Date & Time display */}
           <div className="hidden sm:flex flex-col items-end mr-4 border-r border-gray-200 dark:border-slate-700 pr-6">
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 tracking-wider">TODAY</span>
+            <span className="text-xs font-semibold text-orange-600 dark:text-orange-400 tracking-wider">TODAY</span>
             <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">{currentDate}</span>
           </div>
 
           {/* Notifications */}
-          <button className="relative p-2 text-gray-400 hover:text-emerald-500 transition-colors">
+          <button className="relative p-2 text-gray-400 hover:text-orange-500 transition-colors">
             <span className="sr-only">View notifications</span>
             <Bell className="h-5 w-5" aria-hidden="true" />
             <span className="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
@@ -82,8 +82,8 @@ export default function Header({ toggleSidebar, user }: HeaderProps) {
                 {user?.role === 'admin' ? 'Super Admin' : 'Staff Member'}
               </p>
             </div>
-            <div className="h-9 w-9 rounded-full bg-emerald-100 flex items-center justify-center border-2 border-emerald-500/20 shadow-sm overflow-hidden">
-               <User className="h-5 w-5 text-emerald-600" />
+            <div className="h-9 w-9 rounded-full bg-orange-100 flex items-center justify-center border-2 border-orange-500/20 shadow-sm overflow-hidden">
+               <User className="h-5 w-5 text-orange-600" />
             </div>
           </div>
         </div>

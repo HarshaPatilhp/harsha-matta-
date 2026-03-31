@@ -71,7 +71,7 @@ export default function UsersPage() {
                   <tr key={u.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/50 transition-colors">
                      <td className="px-6 py-4 whitespace-nowrap">
                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 flex items-center justify-center rounded-full text-white font-bold text-lg ${u.role === 'admin' ? 'bg-blue-600' : 'bg-emerald-500'}`}>
+                          <div className={`w-10 h-10 flex items-center justify-center rounded-full text-white font-bold text-lg ${u.role === 'admin' ? 'bg-blue-600' : 'bg-orange-500'}`}>
                              {u.name.charAt(0)}
                           </div>
                           <span className="font-bold text-gray-900 dark:text-white">{u.name}</span>
@@ -85,7 +85,7 @@ export default function UsersPage() {
                         {u.role === 'admin' ? (
                            <span className="bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border border-blue-200 dark:border-blue-800">Administrator</span>
                         ) : (
-                           <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border border-emerald-200 dark:border-emerald-800">Scanner / Vol</span>
+                           <span className="bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border border-orange-200 dark:border-orange-800">Scanner / Vol</span>
                         )}
                      </td>
                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
