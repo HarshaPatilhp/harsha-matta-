@@ -69,17 +69,18 @@ Total Cost: ${bookingData.totalCost}
         to_email: bookingData.email,
         devotee_name: bookingData.devoteeName || bookingData.fullName || 'Devotee',
         'seva.name': bookingData.sevaName, // For {{seva.name}}
-        seva: { name: bookingData.sevaName }, // Fallback for nested JS parsing
-        seva_date: bookingData.date,
-        people_count: bookingData.numberOfPeople || 1,
+        'seva_name': bookingData.sevaName || 'Booking', // No dots allowed in key names to be safe natively
+        'seva.name': bookingData.sevaName || 'Booking', // Keeping just in case
+        seva_date: bookingData.date || 'N/A',
+        people_count: bookingData.numberOfPeople || '1',
         gotra: bookingData.gotra || 'N/A',
         nakshatra: bookingData.nakshatra || 'N/A',
         hall: bookingData.hall || 'N/A',
-        total_cost: String(bookingData.totalCost).replace('₹', ''), // Strip symbol if it exists since template has ₹
+        total_cost: String(bookingData.totalCost || '0').replace('₹', '').replace(',', '').trim(), 
         booking_id: bookingData.id.toString(),
-        qr_code: qrImageUrl, // Renders inside src="{{qr_code}}"
+        qr_code: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${bookingData.id}`, 
         qr_id: bookingData.id.toString(),
-        seva_cost: String(bookingData.sevaCost).replace('₹', ''),
+        seva_cost: String(bookingData.sevaCost || '0').replace('₹', '').replace(',', '').trim(),
         tirtha_prasada: bookingData.lunchRequired ? `Yes (${bookingData.lunchCount} people)` : 'No'
       };
 
