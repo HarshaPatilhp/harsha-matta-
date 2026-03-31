@@ -87,6 +87,34 @@ export default function ScannerPage() {
       
       localStorage.setItem('scanHistory', JSON.stringify([newScan, ...scanHistory]));
 
+      const gotra = String(details.gotra || '').toLowerCase().trim();
+      const brahminGotras = [
+        'kashyapa', 'kasyapa', 'bharadwaja', 'bhardwaj', 'vasishta', 'vashishta', 'vishwamitra',
+        'gautama', 'jamadagni', 'atri', 'agastya', 'kaundinya', 'koundinya', 'srivatsa', 'shrivatsa',
+        'harita', 'haritha', 'gargya', 'sandilya', 'shandilya', 'mudgala', 'naidhruva',
+        'bhargava', 'kamakayana', 'visvamitra', 'vatsa'
+      ];
+      
+      const isBrahmin = brahminGotras.some(bg => gotra.includes(bg));
+      
+      let devoteeCategory = "Non-Brahmin";
+      let redirectHall = "General Dining / Main Hall";
+      
+      if (gotra && isBrahmin) {
+        devoteeCategory = "Brahmin";
+        redirectHall = "Bhojana Shale (Special Hall)";
+      } else if (gotra) {
+        devoteeCategory = "Non-Brahmin";
+        redirectHall = "Annapurna Hall (General Dining)";
+      } else {
+        devoteeCategory = "Unknown";
+        redirectHall = "Enquiry Counter";
+      }
+
+      // Attach to details
+      details.devoteeCategory = devoteeCategory;
+      details.redirectHall = redirectHall;
+
       setScanResult({ 
         status: 'success', 
         message: 'Devotee Verified!', 
@@ -164,26 +192,21 @@ export default function ScannerPage() {
                 </div>
                 <h2 className="text-3xl font-bold text-white mb-2">{scanResult.message}</h2>
                 <div className="bg-white/10 p-6 rounded-2xl mt-4 max-w-sm w-full backdrop-blur-md border border-white/20">
-                  <p className="text-emerald-200 text-xs uppercase tracking-wider mb-1 font-semibold">Devotee</p>
-                  <p className="text-white text-2xl font-bold mb-3">{scanResult.data?.devoteeName || 'Unknown'}</p>
-
-                  {scanResult.data?.devoteeType && (
-                    <>
+                  <p className="text-emerald-200 text-sm uppercase tracking-wider mb-1 font-semibold">Devotee</p>
+                  <p className="text-white text-2xl font-bold mb-4">{scanResult.data?.devoteeName || 'Unknown'}</p>
+                  <p className="text-emerald-200 text-sm uppercase tracking-wider mb-1 font-semibold">Seva Type</p>
+                  <p className="text-white text-xl">{scanResult.data?.sevaName || 'Standard Entry'}</p>
+                  
+                  <div className="grid grid-cols-2 gap-4 mt-4 text-left">
+                    <div>
                       <p className="text-emerald-200 text-xs uppercase tracking-wider mb-1 font-semibold">Category</p>
-                      <p className={`text-lg font-bold mb-3 ${scanResult.data?.devoteeType === 'Brahmin' ? 'text-amber-400' : 'text-blue-300'}`}>
-                        {scanResult.data?.devoteeType}
-                      </p>
-                    </>
-                  )}
-
-                  <p className="text-emerald-200 text-xs uppercase tracking-wider mb-1 font-semibold">Seva Type</p>
-                  <p className="text-white text-lg leading-tight mb-4">{scanResult.data?.sevaName || 'Standard Entry'}</p>
-
-                  <p className="text-emerald-200 text-xs uppercase tracking-wider mb-1 font-semibold">Hall Location</p>
-                  <div className="bg-emerald-800/60 py-2 px-3 rounded-lg border border-emerald-700 inline-block shadow-inner mt-1">
-                    <p className="text-emerald-100 text-sm font-medium">
-                      📍 {scanResult.data?.hall || 'Main Temple'}
-                    </p>
+                      <p className="text-white font-medium">{scanResult.data?.devoteeCategory}</p>
+                      <p className="text-emerald-100/70 text-xs mt-0.5">({scanResult.data?.gotra || 'No Gotra'})</p>
+                    </div>
+                    <div>
+                      <p className="text-emerald-200 text-xs uppercase tracking-wider mb-1 font-semibold">Redirect To</p>
+                      <p className="text-yellow-300 font-bold leading-tight">📍 {scanResult.data?.redirectHall}</p>
+                    </div>
                   </div>
                 </div>
                 <button 

@@ -557,7 +557,6 @@ Total Cost: ${bookingData.totalCost}
         gotra: formData.get('gotra') as string,
         nakshatra: formData.get('nakshatra') as string,
         hall: formData.get('hall') as string,
-        devoteeType: formData.get('devoteeType') as string,
         tirthaPrasadaRequired: formData.get('tirthaPrasadaRequired') === 'yes',
         tirthaPrasadaCount: parseInt(formData.get('tirthaPrasadaCount') as string) || 0,
         lunchRequired: formData.get('tirthaPrasadaRequired') === 'yes',
@@ -878,15 +877,6 @@ Total Cost: ${bookingData.totalCost}
                     className="w-full px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     placeholder="Enter your gotra (e.g., Kashyapa, Bharadwaja)"
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-black mb-1">Devotee Type</label>
-                  <select name="devoteeType" required className="w-full px-3 py-2 border border-black-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
-                    <option value="" disabled selected>Select Devotee Category</option>
-                    <option value="Brahmin">Brahmin</option>
-                    <option value="Non-Brahmin">Non-Brahmin</option>
-                  </select>
                 </div>
 
                 <div>
