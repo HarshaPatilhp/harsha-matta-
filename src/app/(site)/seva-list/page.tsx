@@ -68,9 +68,8 @@ Total Cost: ${bookingData.totalCost}
       const templateParams = {
         to_email: bookingData.email,
         devotee_name: bookingData.devoteeName || bookingData.fullName || 'Devotee',
-        'seva.name': bookingData.sevaName, // For {{seva.name}}
+        'seva.name': bookingData.sevaName || 'Booking', // For {{seva.name}}
         'seva_name': bookingData.sevaName || 'Booking', // No dots allowed in key names to be safe natively
-        'seva.name': bookingData.sevaName || 'Booking', // Keeping just in case
         seva_date: bookingData.date || 'N/A',
         people_count: bookingData.numberOfPeople || '1',
         gotra: bookingData.gotra || 'N/A',
