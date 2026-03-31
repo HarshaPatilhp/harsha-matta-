@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import QRCode from 'qrcode';
+import emailjs from '@emailjs/browser';
 
 interface Seva {
   id: number;
@@ -41,43 +42,32 @@ export default function SevaList() {
 
   const sendBookingEmail = async (bookingData: any) => {
     try {
-      console.log('🔍 [DEBUG] sendBookingEmail called with bookingData:', bookingData);
+      console.log('🔍 [DEBUG] sendBookingEmail called using EmailJS:', bookingData);
       
-      // Generate QR Code
-      const qrCodeDataURL = await QRCode.toDataURL(bookingData.id.toString(), {
-        width: 300,
-        margin: 2,
-        color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        }
-      });
-
-      console.log('🔍 [DEBUG] QR Code generated successfully');
-
-      // Call Next.js API route to send email
-      console.log('🔍 [DEBUG] Sending email via API route...');
+      // EmailJS configuration
+      const SERVICE_ID = 'service_7cfhrr5'; 
+      const TEMPLATE_ID = 'template_umwnbkd'; // Using known template ID
+      const PUBLIC_KEY = 'bfEoBkT_7gXKCRsGg';
       
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          booking: bookingData,
-          qrCode: bookingData.id.toString()
-        }),
-      });
+      emailjs.init(PUBLIC_KEY);
 
-      console.log('🔍 [DEBUG] Netlify function response status:', response.status);
+      const templateParams = {
+        to_email: bookingData.email,
+        devotee_name: bookingData.devoteeName || bookingData.fullName || 'Devotee',
+        seva_name: bookingData.sevaName,
+        booking_id: bookingData.id,
+        date: bookingData.date,
+        time: bookingData.time || 'As scheduled',
+        number_of_people: bookingData.numberOfPeople || 1,
+        total_cost: bookingData.totalCost || 'Paid at temple',
+        qr_data: bookingData.id.toString() 
+      };
+
+      console.log('🔍 [DEBUG] Sending email via EmailJS with params:', templateParams);
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-      }
+      const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
 
-      const result = await response.json();
-      console.log('🔍 [DEBUG] Email sent successfully via Netlify function:', result);
+      console.log('🔍 [DEBUG] Email sent successfully via EmailJS:', response.status, response.text);
       return true;
     } catch (error: any) {
       console.error('🔍 [DEBUG] Email sending error:', error);
@@ -589,7 +579,8 @@ export default function SevaList() {
         }
       } catch (error: any) {
         console.error('Error sending email:', error);
-        alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Email sending failed (Reason: ${error.message || 'Unknown server error'}). Please check Netlify Environment Variables.`);
+        const errMessage = error?.text || error?.message || 'Unknown EmailJS error';
+        alert(`Booking submitted for ${selectedSeva?.name}! Your booking ID is ${bookingData.id}. Email sending failed (Reason: ${errMessage}). Please verify your EmailJS keys.`);
       }
     } catch (error) {
       console.error('Error in booking submission:', error);
