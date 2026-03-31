@@ -140,7 +140,6 @@ export default function ScannerPage() {
   };
 
   return (
-  return (
     <div className="max-w-5xl mx-auto animate-fade-in pb-12">
       <div className="text-center mb-6 sm:mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent inline-block">LIVE Check-in Module</h1>
