@@ -25,7 +25,10 @@ export default function ScannerPage() {
             const data = result?.data || result;
             handleScanSuccess(String(data));
           },
-          { returnDetailedScanResult: true }
+          { 
+            returnDetailedScanResult: true,
+            maxScansPerSecond: 60,
+          }
         );
       }
       qrScannerRef.current.start().catch((err) => {
