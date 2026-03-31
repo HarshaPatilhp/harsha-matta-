@@ -1,3 +1,4 @@
+'use client';
 export default function UpcomingEvents() {
   const events = [
     {
@@ -221,7 +222,7 @@ export default function UpcomingEvents() {
               Subscribe to our newsletter to receive updates about upcoming events, festivals, and spiritual programs.
             </p>
             <div className="max-w-md mx-auto">
-              <form className="flex flex-col sm:flex-row gap-3">
+              <form className="flex flex-col sm:flex-row gap-3" onSubmit={(e) => { e.preventDefault(); alert("Successfully substituted!"); }}>
                 <input
                   type="email"
                   placeholder="Enter your email"
@@ -256,3 +257,4 @@ export default function UpcomingEvents() {
     </div>
   );
 }
+

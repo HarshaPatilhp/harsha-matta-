@@ -1,7 +1,22 @@
+'use client';
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
+  const [subscribing, setSubscribing] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubscribing(true);
+    setTimeout(() => {
+      setSubscribing(false);
+      setSubscribed(true);
+      setTimeout(() => setSubscribed(false), 3000);
+    }, 1000);
+  };
+
   return (
     <div className="min-h-screen">
       {/* Hero Section with Parallax Effect and Gradient Overlay */}
@@ -143,18 +158,25 @@ export default function Home() {
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
               Register your WhatsApp number or Email ID to receive updates on upcoming events and divine discourses.
             </p>
-            <form className="max-w-md mx-auto">
+            <form className="max-w-md mx-auto" onSubmit={handleSubscribe}>
               <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="text"
+                  required
+                  disabled={subscribing || subscribed}
                   placeholder="WhatsApp Number or Email"
                   className="flex-1 px-6 py-4 rounded-xl border-2 border-orange-100 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:border-orange-500 shadow-sm"
                 />
                 <button
                   type="submit"
-                  className="bg-orange-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-orange-700 shadow-md transition-colors whitespace-nowrap"
+                  disabled={subscribing || subscribed}
+                  className={`px-8 py-4 rounded-xl font-bold transition-all shadow-md whitespace-nowrap ${
+                    subscribed 
+                      ? 'bg-green-500 text-white' 
+                      : 'bg-orange-600 text-white hover:bg-orange-700'
+                  }`}
                 >
-                  Subscribe
+                  {subscribing ? 'Subscribing...' : subscribed ? '✓ Subscribed' : 'Subscribe'}
                 </button>
               </div>
             </form>

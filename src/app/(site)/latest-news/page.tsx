@@ -1,3 +1,4 @@
+'use client';
 export default function LatestNews() {
   const news = [
     {
@@ -211,7 +212,7 @@ export default function LatestNews() {
               </p>
 
               <div className="max-w-md mx-auto">
-                <form className="flex flex-col sm:flex-row gap-3">
+                <form className="flex flex-col sm:flex-row gap-3" onSubmit={(e) => { e.preventDefault(); alert("Successfully substituted!"); }}>
                   <input
                     type="email"
                     placeholder="Enter your email address"
@@ -259,3 +260,4 @@ export default function LatestNews() {
     </div>
   );
 }
+
