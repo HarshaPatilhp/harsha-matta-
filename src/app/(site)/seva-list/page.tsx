@@ -68,15 +68,19 @@ Total Cost: ${bookingData.totalCost}
       const templateParams = {
         to_email: bookingData.email,
         devotee_name: bookingData.devoteeName || bookingData.fullName || 'Devotee',
-        seva_name: bookingData.sevaName,
-        booking_id: bookingData.id,
-        date: bookingData.date,
-        time: bookingData.time || 'As scheduled',
-        number_of_people: bookingData.numberOfPeople || 1,
-        total_cost: bookingData.totalCost || 'Paid at temple',
-        qr_data: bookingData.id.toString(),
-        qr_image_url: qrImageUrl,
-        booking_details: bookingDetailsText,
+        'seva.name': bookingData.sevaName, // For {{seva.name}}
+        seva: { name: bookingData.sevaName }, // Fallback for nested JS parsing
+        seva_date: bookingData.date,
+        people_count: bookingData.numberOfPeople || 1,
+        gotra: bookingData.gotra || 'N/A',
+        nakshatra: bookingData.nakshatra || 'N/A',
+        hall: bookingData.hall || 'N/A',
+        total_cost: String(bookingData.totalCost).replace('₹', ''), // Strip symbol if it exists since template has ₹
+        booking_id: bookingData.id.toString(),
+        qr_code: qrImageUrl, // Renders inside src="{{qr_code}}"
+        qr_id: bookingData.id.toString(),
+        seva_cost: String(bookingData.sevaCost).replace('₹', ''),
+        tirtha_prasada: bookingData.lunchRequired ? `Yes (${bookingData.lunchCount} people)` : 'No'
       };
 
       console.log('🔍 [DEBUG] Sending email via EmailJS with params:', templateParams);
