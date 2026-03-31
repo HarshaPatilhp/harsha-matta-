@@ -137,15 +137,16 @@ export default function ScannerPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto animate-fade-in pb-12">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent inline-block">LIVE Check-in Module</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">Position the devotee's QR code within the frame to verify their seva booking.</p>
+  return (
+    <div className="max-w-5xl mx-auto animate-fade-in pb-12">
+      <div className="text-center mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent inline-block">LIVE Check-in Module</h1>
+        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-2 px-4">Position the devotee's QR code within the frame to verify their seva booking.</p>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden relative">
+      <div className="bg-white dark:bg-slate-800 rounded-3xl p-3 sm:p-6 shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden relative">
         {/* Scanner Viewport */}
-        <div className={`relative bg-black rounded-2xl overflow-hidden aspect-square sm:aspect-video flex items-center justify-center transition-all ${isScanning ? 'ring-4 ring-orange-500/50' : ''}`}>
+        <div className={`relative bg-black rounded-2xl overflow-hidden aspect-[4/5] sm:aspect-video w-full flex items-center justify-center transition-all ${isScanning ? 'ring-2 sm:ring-4 ring-orange-500/50' : ''}`}>
           
           {isScanning && (
             <video 
@@ -173,13 +174,13 @@ export default function ScannerPage() {
             <>
               {/* Animated scanning bar */}
               <div className="absolute inset-0 z-10 pointer-events-none w-full h-full flex justify-center items-center">
-                <div className="w-3/4 h-3/4 border-2 border-orange-500/50 rounded-lg relative">
+                <div className="w-[85%] h-[85%] sm:w-3/4 sm:h-3/4 border-2 border-orange-500/50 rounded-lg relative">
                   <div className="absolute top-0 left-0 w-full h-0.5 bg-orange-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-[scan_2s_ease-in-out_infinite]" />
                   {/* Corner brackets */}
-                  <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-orange-500 rounded-tl-lg" />
-                  <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-orange-500 rounded-tr-lg" />
-                  <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-orange-500 rounded-bl-lg" />
-                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-orange-500 rounded-br-lg" />
+                  <div className="absolute top-0 left-0 w-8 h-8 sm:w-10 sm:h-10 border-t-4 border-l-4 border-orange-500 rounded-tl-lg" />
+                  <div className="absolute top-0 right-0 w-8 h-8 sm:w-10 sm:h-10 border-t-4 border-r-4 border-orange-500 rounded-tr-lg" />
+                  <div className="absolute bottom-0 left-0 w-8 h-8 sm:w-10 sm:h-10 border-b-4 border-l-4 border-orange-500 rounded-bl-lg" />
+                  <div className="absolute bottom-0 right-0 w-8 h-8 sm:w-10 sm:h-10 border-b-4 border-r-4 border-orange-500 rounded-br-lg" />
                 </div>
               </div>
               <style jsx>{`
